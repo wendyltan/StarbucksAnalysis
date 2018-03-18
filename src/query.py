@@ -67,7 +67,8 @@ def get_ownership_percentage(table):
     total_record = count_distinct_records_total(table.ownership_type,False)
     result_list = []
     for k,v in result:
-        percent = '%.2f%%' % (v/total_record * 100)
+        percent = v
+        # percent = '%.2f%%' % (v / total_record * 100)
         result_dict = (k,percent)
         result_list.append(result_dict)
     s.close()
