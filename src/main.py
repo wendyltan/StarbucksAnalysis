@@ -7,9 +7,9 @@
 
 import numpy as np
 import os
-from Code import exceltosql as es
-from Code import models as md
-from Code import query as qr
+from src import exceltosql as es
+from src import models as md
+from src import query as qr
 
 if __name__ == '__main__':
     file_name = 'dataset/dataset.xlsx'
@@ -18,6 +18,20 @@ if __name__ == '__main__':
         # transfer excel to database
         es.doTransfer(file_name,db_name)
     table = md.Starbuck
-    qr.get_col_result(table)
+
+    #查询
+
+    #拥有星巴克的前十个国家
+    r1= qr.get_number_of_country(table,10)
+    #四个不同拥有权在全世界的比重
+    r2 = qr.get_ownership_percentage(table)
+    #指定的城市的星巴克分布概况，包括总店铺数和店铺概况列表
+    r3 = qr.get_country_store_info(table,'CN')
+
+    print(r1,'\n',r2,'\n',r3)
+
+
+
+
 
 
