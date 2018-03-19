@@ -37,11 +37,11 @@ if __name__ == '__main__':
     r1= qr.get_number_of_country(table,10)
     #四个不同拥有权在全世界的比重
     r2 = qr.get_ownership_percentage(table)
-    #指定的城市的星巴克分布概况，包括总店铺数和店铺概况列表
-    r3 = qr.get_country_store_info(table,'CN')
+
+
     #
     #
-    # #绘制条形图
+    #绘制条形图
     # key1,value1 = get_seperate_list(r1)
     # dc.gen_Bar(key1,value1,"Top 10 country and their stores")
     #
@@ -49,7 +49,7 @@ if __name__ == '__main__':
     # key2,value2 = get_seperate_list(r2)
     # dc.gen_Pie(key2,value2,"4 ownership")
     #
-    # #根据数量绘制条形图
+    #根据数量绘制条形图
     # all_city_name = []
     # for item in r3[1]:
     #     all_city_name.append(item[0])
@@ -65,6 +65,7 @@ if __name__ == '__main__':
     # key4,value4 = get_seperate_list(country_city_topten)
     #
     # dc.gen_Pie(key4,value4,"国内前十个店铺最多的城市")
+    # #
 
-
+        # dc.drawCountryMap()
 
