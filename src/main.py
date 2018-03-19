@@ -7,21 +7,9 @@
 
 
 import os
-from src import exceltosql as es
+from src.util import exceltosql as es
 from src import models as md
 from src import query as qr
-from src import drawChart as dc
-from collections import Counter
-
-def get_seperate_list(raw_result):
-    key = []
-    value = []
-
-    for row in raw_result:
-        key.append(row[0])
-        value.append(row[1])
-    return key,value
-
 
 if __name__ == '__main__':
     file_name = 'dataset/dataset.xlsx'
@@ -37,16 +25,21 @@ if __name__ == '__main__':
     r1= qr.get_number_of_country(table,10)
     #四个不同拥有权在全世界的比重
     r2 = qr.get_ownership_percentage(table)
+    #获得中国的店铺信息
+    r3 = qr.get_country_store_info(table,'CN')
 
+    count,position = qr.get_position(table,range='country',country_code='CN')
+    print(count)
+    print(position)
 
     #
     #
-    #绘制条形图
-    # key1,value1 = get_seperate_list(r1)
+    # 绘制条形图
+    # key1,value1 = hp.get_seperate_list(r1)
     # dc.gen_Bar(key1,value1,"Top 10 country and their stores")
     #
     # #绘制饼图
-    # key2,value2 = get_seperate_list(r2)
+    # key2,value2 = hp.get_seperate_list(r2)
     # dc.gen_Pie(key2,value2,"4 ownership")
     #
     #根据数量绘制条形图
@@ -62,10 +55,8 @@ if __name__ == '__main__':
     # for item in r3[2]:
     #     country_city_topten.append(item)
     #
-    # key4,value4 = get_seperate_list(country_city_topten)
+    # key4,value4 = hp.get_seperate_list(country_city_topten)
     #
     # dc.gen_Pie(key4,value4,"国内前十个店铺最多的城市")
     # #
-
-        # dc.drawCountryMap()
 

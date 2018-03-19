@@ -2,8 +2,6 @@
 use this file to transfer csv to xlsx dataformat
 '''
 import pyexcel
-
-
 def from_csv_to_xlsx(from_file,to_file):
     pyexcel.save_as(file_name=from_file,dest_file_name=to_file)
 def getSheet(file_name):

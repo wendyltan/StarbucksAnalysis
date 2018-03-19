@@ -4,15 +4,11 @@
 # @Author  : Wendyltanpcy
 # @File    : query.py
 # @Software: PyCharm
-import re
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy import func
 from sqlalchemy import distinct
-
-engine = create_engine('sqlite:///starbucks.db')
-Session = sessionmaker(bind=engine)
+from src.util import helper as hp
+from src import Session
 
 def get_number_of_country(table,times):
     '''
@@ -26,9 +22,7 @@ def get_number_of_country(table,times):
     count = func.count(table.country)
     #select top n of country and their store numbers
     result = s.query(table.country,count).group_by(table.country).order_by(count.desc()).limit(times)
-    result_list = []
-    for row in result:
-        result_list.append(row)
+    result_list = hp.row_into_list(result)
     s.close()
     return result_list
 
@@ -40,14 +34,12 @@ def select_city_from_country(table,times,country_code):
     :param country_code:
     :return:
     '''
-    pattern = re.compile('^[A-Z]{2}$')
-    if re.match(pattern, country_code):
+
+    if hp.check_if_valid(country_code):
         s = Session()
         count = func.count(table.city)
         result = s.query(table.city,count).filter(table.country==country_code).group_by(table.city).order_by(count.desc()).limit(times)
-        result_list = []
-        for row in result:
-            result_list.append(row)
+        result_list = hp.row_into_list(result)
         s.close()
         return result_list
     else:
@@ -63,8 +55,7 @@ def get_ownership_percentage(table):
     count = func.count(table.ownership_type)
     result = s.query(table.ownership_type, count).group_by(table.ownership_type).order_by(count.desc()).all()
 
-    #25600
-    total_record = count_distinct_records_total(table.ownership_type,False)
+    # total_record = count_distinct_records_total(table.ownership_type,False)
     result_list = []
     for k,v in result:
         percent = v
@@ -81,28 +72,20 @@ def get_country_store_info(table,country_code):
     :param country_code:
     :return:
     '''
-    pattern = re.compile('^[A-Z]{2}$')
-    if re.match(pattern,country_code):
+
+    if hp.check_if_valid(country_code):
         s = Session()
-        result = s.query(table.city,table.store_number,table.store_name,table.street_address).filter(table.country==country_code).all()
+        basic = s.query(table.city,table.store_number,table.store_name,table.street_address).filter(table.country==country_code).all()
         count = s.query(func.count(table.store_name)).filter(table.country==country_code).all()
         for row in count:
             count = row[0]
-        # print("The count of the store in this country: ",count)
-        # print("="*50)
-        # print("The basic info is listed below:")
-        # print("|city\t\t\t|storeNumber\t\t\t|storeName\t\t\t|streetAddress")
-        basic_info = []
-        for row in result:
-            # print(row)
-            basic_info.append(row)
 
+        basic_info = hp.row_into_list(basic)
         top_ten = select_city_from_country(table,10,country_code)
-        # print("Top ten city info is listed below: ")
-        # print(top_ten)
-        # print("=" * 50)
+
         s.close()
         result_list = [count,basic_info,top_ten]
+
         return result_list
     else:
         print("Invalid country code!(ex: 'AE')")
@@ -126,4 +109,34 @@ def count_distinct_records_total(table_row,count_distinct=True):
 
     s.close()
     return count
+
+def get_position(table,range='world',country_code=None):
+
+    s = Session()
+
+    if range == 'world':
+        #返回世界范围的店铺位置信息
+        result = s.query(distinct(table.store_name),table.city,table.longitude,table.latitude).limit(100)
+        result_list = hp.row_into_list(result)
+        return result_list
+    elif range == 'country' and hp.check_if_valid(country_code):
+        #返回某个国家的店铺位置信息
+        city_count = func.count(table.city)
+        store_city_count = s.query(table.city,city_count).filter(table.country==country_code).group_by(table.city).order_by(city_count.desc()).all()
+        store_position = s.query(table.store_name,table.city,table.longitude,table.latitude).filter(table.country==country_code)\
+        .group_by(table.store_name).all()
+
+        count = hp.row_into_list(store_city_count)
+        position = hp.row_into_list(store_position)
+        return count,position
+
+    else:
+        print("Invalid parameters!")
+
+    s.close()
+
+
+
+
+
 

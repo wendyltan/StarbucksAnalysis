@@ -13,4 +13,4 @@ A analytical project for Starbucks dataset
 
 ## 历史开发进度
 
-- 18/3/19 : **Wendy**粗略对模块分块，编写部分函数
+- 18/3/19前 : **Wendy**粗略对模块分块，编写部分函数
