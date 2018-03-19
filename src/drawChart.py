@@ -6,7 +6,7 @@
 # @Software: PyCharm
 import plotly.graph_objs as go
 import  plotly.offline as off
-import numpy as np
+
 
 def gen_Bar(datalist1,datalist2,title):
 
@@ -21,10 +21,10 @@ def gen_Bar(datalist1,datalist2,title):
     )
 
     fig = go.Figure(data=trace, layout=layout)
-    off.plot(fig, filename=title)
+    off.plot(fig, filename=title+'.html')
     print("success!")
 
-def gen_Scatter(datalist1,datalist2):
+def gen_Scatter(datalist1,datalist2,title):
     trace = [go.Scatter(
         x=datalist2,
         y=datalist1,
@@ -32,7 +32,7 @@ def gen_Scatter(datalist1,datalist2):
     )]
 
 
-    off.plot(trace, filename='scatter-plot-with-colorscale.html')
+    off.plot(trace, filename=title+'.html')
 def gen_Pie(datalist1,datalist2,title):
     labels = datalist1
     values = datalist2
@@ -48,5 +48,8 @@ def gen_Pie(datalist1,datalist2,title):
                    marker=dict(colors=colors,
                                line=dict(color='#000000', width=2)))]
     fig = go.Figure(data = trace,layout=layout)
-    off.plot(fig,filename=title)
+    off.plot(fig,filename=title+'.html')
     print("success!")
+
+def drawMap():
+    m = Basemap()

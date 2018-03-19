@@ -22,6 +22,7 @@ def get_seperate_list(raw_result):
         value.append(row[1])
     return key,value
 
+
 if __name__ == '__main__':
     file_name = 'dataset/dataset.xlsx'
     db_name = 'starbucks.db'
@@ -38,26 +39,32 @@ if __name__ == '__main__':
     r2 = qr.get_ownership_percentage(table)
     #指定的城市的星巴克分布概况，包括总店铺数和店铺概况列表
     r3 = qr.get_country_store_info(table,'CN')
-
-
-
+    #
+    #
+    # #绘制条形图
     # key1,value1 = get_seperate_list(r1)
     # dc.gen_Bar(key1,value1,"Top 10 country and their stores")
     #
+    # #绘制饼图
     # key2,value2 = get_seperate_list(r2)
     # dc.gen_Pie(key2,value2,"4 ownership")
-
-
-    all_city_name = []
-    all_city_count = []
-    for item in r3[1]:
-        all_city_name.append(item[0])
-    print(all_city_name)
-
-    key = list(Counter(all_city_name).keys())
-    print(key)
-    value = list(Counter(all_city_name).values())
-    dc.gen_Scatter(key,value)
+    #
+    # #根据数量绘制条形图
+    # all_city_name = []
+    # for item in r3[1]:
+    #     all_city_name.append(item[0])
+    #
+    # key3= list(Counter(all_city_name).keys())
+    # value3 = list(Counter(all_city_name).values())
+    # dc.gen_Bar(key3,value3,"国内星巴克城市店面分布")
+    #
+    # country_city_topten = []
+    # for item in r3[2]:
+    #     country_city_topten.append(item)
+    #
+    # key4,value4 = get_seperate_list(country_city_topten)
+    #
+    # dc.gen_Pie(key4,value4,"国内前十个店铺最多的城市")
 
 
 
