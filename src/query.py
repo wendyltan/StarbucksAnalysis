@@ -116,7 +116,7 @@ def get_position(table,range='world',country_code=None):
 
     if range == 'world':
         #返回世界范围的店铺位置信息
-        result = s.query(distinct(table.store_name),table.city,table.longitude,table.latitude).limit(100)
+        result = s.query(distinct(table.store_name),table.city,table.longitude,table.latitude).all()
         result_list = hp.row_into_list(result)
         return result_list
     elif range == 'country' and hp.check_if_valid(country_code):

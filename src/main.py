@@ -7,9 +7,14 @@
 
 
 import os
+
+from pandas import DataFrame
+
 from src.util import exceltosql as es
 from src import models as md
 from src import query as qr
+from src import drawChart as dc
+
 
 if __name__ == '__main__':
     file_name = 'dataset/dataset.xlsx'
@@ -28,9 +33,28 @@ if __name__ == '__main__':
     #获得中国的店铺信息
     r3 = qr.get_country_store_info(table,'CN')
 
-    count,position = qr.get_position(table,range='country',country_code='CN')
-    print(count)
-    print(position)
+    position = qr.get_position(table,range='world')
+
+    # print(position)
+    # 绘制地图
+    # starbucks = {"Store Name":[],"City":[],"Longitude":[],"Latitude":[]}
+    starbucks = {}
+    continent = 'world'
+    store_name = []
+    city = []
+    longitude = []
+    latitude = []
+    for info in position:
+        store_name.append(info[0])
+        city.append(info[1])
+        longitude.append(info[2])
+        latitude.append(info[3])
+    starbucks["Store Name"]=store_name
+    starbucks["City"]=city
+    starbucks["Longitude"]=longitude
+    starbucks["Latitude"]=latitude
+    starbucks = DataFrame(starbucks)
+    dc.draw_map(starbucks, continent)
 
     #
     #
