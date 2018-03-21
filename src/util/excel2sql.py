@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2018/3/17 15:11
 # @Author  : Wendyltanpcy
-# @File    : exceltosql.py
+# @File    : excel2sql.py
 # @Software: PyCharm
 
 '''
