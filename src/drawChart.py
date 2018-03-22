@@ -8,8 +8,9 @@
 functions in this script deal with map or chart drawing
 """
 import plotly.graph_objs as go
-import  plotly.offline as off
+import plotly.offline as off
 from src.util import helper as hp
+
 
 def gen_Bar(datalist1,datalist2,title,export=False):
 
@@ -74,7 +75,7 @@ def draw_map(starbucks,continent='world',export=False):
     else:
         data = [dict(
             type='scattergeo',
-            # locationmode='World',
+            #locationmode='USA-states',貌似没有用，不像文档所述
             lon=starbucks['Longitude'],
             lat=starbucks['Latitude'],
             text=starbucks['text'],
@@ -88,7 +89,7 @@ def draw_map(starbucks,continent='world',export=False):
             ))]
 
         layout = dict(
-                title='Starbucks in the '+ continent + '<br>',
+                title='Starbucks in the '+ continent.title() + '<br>',
                 geo=dict(
                     scope=continent,
                     showcountries=True,
@@ -103,6 +104,52 @@ def draw_map(starbucks,continent='world',export=False):
 
         fig = dict(data=data,layout=layout)
         if export:
-            off.plot(fig, image='jpeg',image_width=1920,image_height=1080, image_filename=continent)
+            off.plot(fig, image='jpeg',image_width=1920,image_height=1080, image_filename=continent.title())
         else:
-            off.plot(fig, filename=continent + '.html')
+            off.plot(fig, filename=continent.title() + '.html')
+
+
+
+
+#Brand Store Number	Store Name	Ownership Type	Street Address	City
+#State/Province	Country	Postcode	Phone Number	Timezone
+#Longitude	Latitude
+
+def draw_map_by_timezone(starbucks,export=False):
+    starbucks = hp.set_random_color(starbucks, "Timezone")
+    starbucks['text'] = starbucks["Store Name"] + ',' + starbucks["Timezone"]
+    continent = "world"
+    data = [dict(
+        type='scattergeo',
+        lon=starbucks['Longitude'],
+        lat=starbucks['Latitude'],
+        text=starbucks['text'],
+        mode='markers',
+        marker=dict(
+            size=3,
+            opacity=0.8,
+            reversescale=True,
+            autocolorscale=False,
+            symbol='circular',
+            color=starbucks["Rgb Value"]
+        ))]
+
+    layout = dict(
+        title='Starbucks in the ' + continent.title() + '<br>',
+        geo=dict(
+            scope=continent,
+            showcountries=True,
+            countrycolor="rgb(0,0,0)",
+            showland=True,
+            landcolor="rgb(250, 250, 250)",
+            subunitcolor="rgb(217, 217, 217)",
+            countrywidth=0.5,
+            subunitwidth=0.5
+        ),
+    )
+
+    fig = dict(data=data, layout=layout)
+    if export:
+        off.plot(fig, image='jpeg', image_width=1920, image_height=1080, image_filename=continent.title())
+    else:
+        off.plot(fig, filename=continent.title() + '.html')

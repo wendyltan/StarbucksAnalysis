@@ -10,6 +10,8 @@ all help functions go into here
 """
 
 import re
+import random
+import pandas as pd
 from collections import Counter
 
 
@@ -71,3 +73,29 @@ def get_seperate_list(raw_result):
         yield(new_list)
         i = 0
         j += 1
+
+
+def set_random_color(dataframe,column):
+    """
+    用于生成原有属性对应的随机rgb值，并插入原有的DataFrame中，返回DataFrame数据
+    例如set_random_color(starbucks,Timezone)，用于生成不同时区对应不同颜色
+    :param dataframe:原有的DataFrame数据
+    :param column:根据的列名
+    :return:带有“Rgb Value”的DataFrame数据
+    """
+    column_color = {}
+    column_color_for_df = []
+    column_color_df = {}
+    for column_value in dataframe[column]:
+        r = random.randint(0, 255)
+        g = random.randint(0, 255)
+        b = random.randint(0, 255)
+        rgb_value = "rgb(" + str(r) + "," + str(g) + "," + str(b) + ")"
+        if column_value not in column_color.keys() and rgb_value not in column_color.values():
+            column_color[column] = rgb_value
+    for column_value in dataframe[column]:
+        column_color_for_df.append(column_color[column])
+    column_color_df["Rgb Value"] = column_color_for_df
+    color_df = pd.DataFrame(column_color_df)
+    dataframe.insert(dataframe.columns,"Rgb Value",color_df)
+    return dataframe
