@@ -61,7 +61,7 @@ if __name__ == '__main__':
     # starbucks["Latitude"] = result_list[3]
     # starbucks = DataFrame(starbucks)
     # #画世界/亚洲等范围的地图
-    # dc.draw_map(starbucks,continent='asia',export=False)
+    # dc.draw_map(qr.get_dataFrame(table),continent='asia',export=False)
 
     # 绘制不同时区的散点图
     # starbucks = {}
@@ -70,6 +70,6 @@ if __name__ == '__main__':
     # starbucks["Timezone"] =
     # starbucks["Longitude"] =
     # starbucks["Latitude"] =
-    # dc.draw_map_by_timezone(starbucks)
+    # dc.draw_map_by_timezone(qr.get_dataFrame(table))
 
 

@@ -4,7 +4,7 @@
 # @Author  : Wendyltanpcy
 # @File    : query.py
 # @Software: PyCharm
-
+from pandas import DataFrame
 from sqlalchemy import func
 from sqlalchemy import distinct
 from src.util import helper as hp
@@ -134,6 +134,38 @@ def get_position(table,range='world',country_code=None):
         print("Invalid parameters!")
 
     s.close()
+
+def get_dataFrame(table):
+    """
+    combine all data in database into dataframe format
+    :param table:
+    :return:
+    """
+    s = Session()
+    result = s.query(table.store_name,table.city,table.store_number,table.brand,\
+                     table.ownership_type,table.street_address,table.country,table.postcode,table.phone_number,\
+                     table.longitude,table.latitude,table.timezone,table.stateprovince).all()
+    result_list = hp.row_into_list(hp.get_seperate_list(result))
+    starbucks = {}
+    starbucks["Store Name"] = result_list[0]
+    starbucks["City"] = result_list[1]
+    starbucks["Store Number"] = result_list[2]
+    starbucks["Brand"] = result_list[3]
+    starbucks["Ownership Type"] = result_list[4]
+    starbucks["Street Address"] = result_list[5]
+    starbucks["Country"] = result_list[6]
+    starbucks["Postcode"] = result_list[7]
+    starbucks["Phone Number"] = result_list[8]
+    starbucks["Longitude"] = result_list[9]
+    starbucks["Latitude"] =result_list[10]
+    starbucks["Timezone"] = result_list[11]
+    starbucks["State/Province"]=result_list[12]
+
+    dataframe = DataFrame(starbucks)
+
+    s.close()
+    return dataframe
+
 
 
 
