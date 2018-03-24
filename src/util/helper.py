@@ -92,10 +92,10 @@ def set_random_color(dataframe,column):
         b = random.randint(0, 255)
         rgb_value = "rgb(" + str(r) + "," + str(g) + "," + str(b) + ")"
         if column_value not in column_color.keys() and rgb_value not in column_color.values():
-            column_color[column] = rgb_value
+            column_color[column_value] = rgb_value
     for column_value in dataframe[column]:
-        column_color_for_df.append(column_color[column])
+        column_color_for_df.append(column_color[column_value])
     column_color_df["Rgb Value"] = column_color_for_df
     color_df = pd.DataFrame(column_color_df)
-    dataframe.insert(dataframe.columns,"Rgb Value",color_df)
+    dataframe.insert(len(dataframe.columns),"Rgb Value",color_df)
     return dataframe

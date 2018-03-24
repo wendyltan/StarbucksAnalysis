@@ -52,7 +52,7 @@ if __name__ == '__main__':
     # dc.gen_Pie(key4,value4,"国内前十个店铺最多的城市")
     #
 
-    # # 绘制地图
+    # # 绘制地图1
     # starbucks = {}
     # result_list = hp.row_into_list(hp.get_seperate_list(position))
     # starbucks["Store Name"] = result_list[0]
@@ -63,13 +63,12 @@ if __name__ == '__main__':
     # #画世界/亚洲等范围的地图
     # dc.draw_map(qr.get_dataFrame(table),continent='asia',export=False)
 
+    # 绘制地图2
+    # starbucks = qr.get_dataFrame(table)
+    # dc.draw_map(starbucks,continent='world')
+
     # 绘制不同时区的散点图
-    # starbucks = {}
-    # 需要迪哥的数据集!
-    # starbucks["Store Name"] =
-    # starbucks["Timezone"] =
-    # starbucks["Longitude"] =
-    # starbucks["Latitude"] =
-    # dc.draw_map_by_timezone(qr.get_dataFrame(table))
+    starbucks = qr.get_dataFrame(table) # 包含所有数据的数据集
+    dc.draw_map_by_timezone(qr.get_dataFrame(table))
 
 
