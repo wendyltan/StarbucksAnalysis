@@ -42,6 +42,8 @@ def sandian():
     dc.draw_map_by_timezone(qr.get_dataFrame(table))
 
 
+
+
 # 这个语句会使得tkinter不能调用绘制地图的方法
 #  if __name__ == ('__main__' ):
 # ---
@@ -52,6 +54,7 @@ def sandian():
 # ---
 
 if __name__ == '__main__':
+
     win = Tk()
     win.title("星巴克数据分析")
     app = g.App(win)
@@ -67,7 +70,7 @@ if __name__ == '__main__':
     # # 全世界的店铺范围和信息
     # position = qr.get_position(table, range='world')
     # #
-    
+
 
     # 根据数量绘制条形图
     # all_city_name = []

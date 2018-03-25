@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import ttk
-import src.main as main
+from src import main as ma
 # don't have to import main,use tk in main instead.
 class App():
     def __init__(self,master):
@@ -28,7 +28,7 @@ class App():
         #创建两个button，并作为frame的一部分
         self.button = Button(frame, text="QUIT", fg="red", command=frame.quit)
         self.button.pack() #此处side为LEFT表示将其放置 到frame剩余空间的最左方
-        self.tiao = Button(frame, text="Map", command=main.sandian)
+        self.tiao = Button(frame, text="Map", command=ma.sandian)
         self.tiao.pack()
 
     def say_hi(self):
