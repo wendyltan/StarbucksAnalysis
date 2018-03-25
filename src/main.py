@@ -13,28 +13,45 @@ from src import query as qr
 from src import drawChart as dc
 from src.util import helper as hp
 
-if __name__ == '__main__':
+def select(name):
+     if name == '散点图':
+         sandian
+     if name == '条形图':
+         paint
+
+ # # 绘制条形图
+def paint():
+    key1,value1 = hp.get_seperate_list(r1)
+    dc.gen_Bar(key1,value1,"Top 10 country and their stores")
+
+# #绘制饼图
+def bing():
+    key2,value2 = hp.get_seperate_list(r2)
+    dc.gen_Pie(key2,value2,"4 ownership")
+
+# 绘制不同时区的散点图
+def sandian():
+	starbucks = qr.get_dataFrame(table) # 包含所有数据的数据集
+	dc.draw_map_by_timezone(qr.get_dataFrame(table))
+
+#这个语句会使得tkinter不能调用绘制地图的方法	
+#if __name__ == ('__main__' ):
 
 
     #查询
-
     #拥有星巴克的前十个国家
-    r1= qr.get_number_of_country(table,10)
-    #四个不同拥有权在全世界的比重
-    r2 = qr.get_ownership_percentage(table)
-    #获得中国的店铺信息
-    r3 = qr.get_country_store_info(table,'CN')
-    #全世界的店铺范围和信息
-    position = qr.get_position(table,range='world')
+r1= qr.get_number_of_country(table,10)
+#四个不同拥有权在全世界的比重
+r2 = qr.get_ownership_percentage(table)
+#获得中国的店铺信息
+r3 = qr.get_country_store_info(table,'CN')
+#全世界的店铺范围和信息
+position = qr.get_position(table,range='world')
     #
 
-    # # 绘制条形图
-    # key1,value1 = hp.get_seperate_list(r1)
-    # dc.gen_Bar(key1,value1,"Top 10 country and their stores")
+   
     #
-    # #绘制饼图
-    # key2,value2 = hp.get_seperate_list(r2)
-    # dc.gen_Pie(key2,value2,"4 ownership")
+    
     #
     # # 根据数量绘制条形图
     # all_city_name = []
@@ -67,8 +84,6 @@ if __name__ == '__main__':
     # starbucks = qr.get_dataFrame(table)
     # dc.draw_map(starbucks,continent='world')
 
-    # 绘制不同时区的散点图
-    starbucks = qr.get_dataFrame(table) # 包含所有数据的数据集
-    dc.draw_map_by_timezone(qr.get_dataFrame(table))
+   
 
 
