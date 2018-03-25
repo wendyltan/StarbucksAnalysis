@@ -19,3 +19,5 @@ A analytical project for Starbucks dataset
 - 18/3/20-3/21 **huangyep** 完成地图函数编写，**Wendy** 进行优化并抽象部分函数
 
 - 18/3/19前 : **Wendy**粗略对模块分块，编写部分函数
+
+- 18/3.25: **jasonli** 可以通过tk.py 文件启动GUI，点击按钮打开地图，接下来将修改为使用combobox下拉列            表实现多种地图。同时修改了main.py,将部分功能改为可调用函数。
