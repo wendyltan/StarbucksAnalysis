@@ -13,6 +13,14 @@ from src.util import helper as hp
 
 
 def gen_Bar(datalist1,datalist2,title,export=False):
+    """
+    绘制条形图
+    :param datalist1:
+    :param datalist2:
+    :param title:
+    :param export:
+    :return:
+    """
 
     trace = [go.Bar(
         x=datalist1,
@@ -30,6 +38,14 @@ def gen_Bar(datalist1,datalist2,title,export=False):
         off.plot(fig, filename=title+'.html')
 
 def gen_Scatter(datalist1,datalist2,title,export=False):
+    """
+    绘制散点图
+    :param datalist1:
+    :param datalist2:
+    :param title:
+    :param export:
+    :return:
+    """
     trace = [go.Scatter(
         x=datalist2,
         y=datalist1,
@@ -43,6 +59,14 @@ def gen_Scatter(datalist1,datalist2,title,export=False):
         off.plot(fig, filename=title+'.html')
 
 def gen_Pie(datalist1,datalist2,title,export=False):
+    """
+    绘制饼图
+    :param datalist1:
+    :param datalist2:
+    :param title:
+    :param export:
+    :return:
+    """
     labels = datalist1
     values = datalist2
     colors = ['#FEBFB3', '#E1396C', '#96D38C', '#D0F9B1']
