@@ -39,7 +39,7 @@ def bing():
 # 绘制不同时区的散点图
 def sandian():
     starbucks = qr.get_dataFrame(table)  # 包含所有数据的数据集
-    dc.draw_map_by_timezone(qr.get_dataFrame(table))
+    dc.draw_map(qr.get_dataFrame(table))
 
 
 
@@ -102,3 +102,4 @@ if __name__ == '__main__':
     # 绘制地图2
     # starbucks = qr.get_dataFrame(table)
     # dc.draw_map(starbucks,continent='world')
+    # dc.draw_map(starbucks,'world',isTimeZone=True)

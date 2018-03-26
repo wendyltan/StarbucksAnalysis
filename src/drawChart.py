@@ -69,6 +69,7 @@ def gen_Pie(datalist1,datalist2,title,export=False):
     """
     labels = datalist1
     values = datalist2
+    #一些颜色列表
     colors = ['#FEBFB3', '#E1396C', '#96D38C', '#D0F9B1']
 
     layout = go.Layout(
@@ -86,14 +87,27 @@ def gen_Pie(datalist1,datalist2,title,export=False):
     else:
         off.plot(fig, filename=title+'.html')
 
-def draw_map(starbucks,continent='world',export=False):
+
+
+def draw_map(starbucks,continent='world',export=False,isTimeZone=False):
     """
     传入DataFrame的starbucks和洲名，在地图上标出所有点
-    :param starbucks:至少包括城市，店名，经纬度
+    :param starbucks:星巴克的所有列数据
     :param continent:可选值[ "world" | "usa" | "europe" | "asia" | "africa" | "north america" | "south america"]
     :return:形成html文件，自动在浏览器打开
+    尽量重用和抽象代码避免累赘
     """
-    starbucks['text'] = starbucks['City'] + ',' + starbucks["Store Name"]
+
+    #是否根据时区筛选
+    if not isTimeZone:
+        starbucks['text'] = starbucks['City'] + ',' + starbucks["Store Name"]
+        use_color = 'rgb(141, 211, 199)'
+    else:
+        starbucks['text'] = starbucks["Store Name"] + ',' + starbucks["Timezone"]
+        starbucks = hp.set_random_color_for_df(starbucks, "Timezone")
+        use_color = starbucks["Rgb Value"]
+
+    #判断地图范围参数是否有效
     if hp.check_map_range_valid(continent):
         print("Please enter valid range name!")
     else:
@@ -110,6 +124,7 @@ def draw_map(starbucks,continent='world',export=False):
                 reversescale=True,
                 autocolorscale=False,
                 symbol='circular',
+                color=use_color
             ))]
 
         layout = dict(
@@ -131,49 +146,3 @@ def draw_map(starbucks,continent='world',export=False):
             off.plot(fig, image='jpeg',image_width=1920,image_height=1080, image_filename=continent.title())
         else:
             off.plot(fig, filename=continent.title() + '.html')
-
-
-
-
-#Brand Store Number	Store Name	Ownership Type	Street Address	City
-#State/Province	Country	Postcode	Phone Number	Timezone
-#Longitude	Latitude
-
-def draw_map_by_timezone(starbucks,export=False):
-    starbucks = hp.set_random_color(starbucks, "Timezone")
-    starbucks['text'] = starbucks["Store Name"] + ',' + starbucks["Timezone"]
-    continent = "world"
-    data = [dict(
-        type='scattergeo',
-        lon=starbucks['Longitude'],
-        lat=starbucks['Latitude'],
-        text=starbucks['text'],
-        mode='markers',
-        marker=dict(
-            size=3,
-            opacity=0.8,
-            reversescale=True,
-            autocolorscale=False,
-            symbol='circular',
-            color=starbucks["Rgb Value"]
-        ))]
-
-    layout = dict(
-        title='Starbucks in the ' + continent.title() + '<br>',
-        geo=dict(
-            scope=continent,
-            showcountries=True,
-            countrycolor="rgb(0,0,0)",
-            showland=True,
-            landcolor="rgb(250, 250, 250)",
-            subunitcolor="rgb(217, 217, 217)",
-            countrywidth=0.5,
-            subunitwidth=0.5
-        ),
-    )
-
-    fig = dict(data=data, layout=layout)
-    if export:
-        off.plot(fig, image='jpeg', image_width=1920, image_height=1080, image_filename=continent.title())
-    else:
-        off.plot(fig, filename=continent.title() + '.html')

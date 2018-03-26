@@ -1,5 +1,5 @@
 [
-  "test.py::TestMain::test_check_if_valid",
-  "test.py::TestMain::test_check_map_range_valid",
-  "test.py::TestMain::test_row_into_list"
+  "test_helper.py::TestHelper::test_check_if_valid",
+  "test_helper.py::TestHelper::test_check_map_range_valid",
+  "test_helper.py::TestHelper::test_row_into_list"
 ]

@@ -75,7 +75,7 @@ def get_seperate_list(raw_result):
         j += 1
 
 
-def set_random_color(dataframe,column):
+def set_random_color_for_df(dataframe, column):
     """
     用于生成原有属性对应的随机rgb值，并插入原有的DataFrame中，返回DataFrame数据
     例如set_random_color(starbucks,Timezone)，用于生成不同时区对应不同颜色

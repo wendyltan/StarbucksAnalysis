@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2018/3/25 20:50
 # @Author  : Wendyltanpcy
-# @File    : test.py
+# @File    : test_helper.py
 # @Software: PyCharm
 import unittest
 from src.util import helper as hp
-class TestMain(unittest.TestCase):
+class TestHelper(unittest.TestCase):
     """
     Written all test codes here,currently only for helper.py
     """
