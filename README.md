@@ -16,7 +16,7 @@ A analytical project for Starbucks dataset
 
 ## 历史开发进度
 - 18/3/25: 
-  + **jasonli** 可以通过tk.py 文件启动GUI，点击按钮打开地图，接下来将修改为使用combobox下拉列表实现多种地图。同时修改了main.py,将部分功能改为可调用函数。
+  + **jasonli** 可以通过`tk.py` 文件启动GUI，点击按钮打开地图，接下来将修改为使用combobox下拉列表实现多种地图。同时修改了`main.py`,将部分功能改为可调用函数。
   + **Wendy**将`tk.py`更改为`gui.py`并将启动函数放置到`main.py`保证gui部分的整洁和低耦合。
 
 - 18/3/20-3/21 **huangyep** 完成地图函数编写，**Wendy** 进行优化并抽象部分函数
