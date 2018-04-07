@@ -10,13 +10,19 @@ import sys
 class MainWindow(QMainWindow):
     # noinspection PyUnresolvedReferences
     def tiaoxing(self):
-        url = 'file:///C:/Users/J/PycharmProjects/sad/World.html'
+        url = 'file:///C:/Users/J/Desktop/Agile2018/StarbucksAnalysis/src/tiao.html'
         # 指定打开界面的 URL
         self.browser.setUrl(QUrl(url))
         # 添加浏览器到窗口中
         self.setCentralWidget(self.browser)
     def sandian(self):
-        url = 'http:///www.ichacha.net'
+        url = 'file:///C:/Users/J/Desktop/Agile2018/StarbucksAnalysis/src/san.html'
+        # 指定打开界面的 URL
+        self.browser.setUrl(QUrl(url))
+        # 添加浏览器到窗口中
+        self.setCentralWidget(self.browser)
+    def bing(self):
+        url = 'file:///C:/Users/J/Desktop/Agile2018/StarbucksAnalysis/src/bing.html'
         # 指定打开界面的 URL
         self.browser.setUrl(QUrl(url))
         # 添加浏览器到窗口中
@@ -26,7 +32,7 @@ class MainWindow(QMainWindow):
         # 设置窗口标题
         self.setWindowTitle('星巴克数据分析')
         # 设置窗口图标
-        self.setWindowIcon(QIcon('/icons/star.png'))
+        self.setWindowIcon(QIcon('star.png'))
         # 设置窗口大小
         self.resize(1200, 800)
         self.show()
@@ -52,16 +58,19 @@ class MainWindow(QMainWindow):
         #QAction类提供了抽象的用户界面action，这些action可以被放置在窗口部件中
         tiaoxing_btn = QAction('条形图',self)
         sandian_btn = QAction('散点图',self)
+        bing_btn = QAction('饼状图',self)
         back_button = QAction( '后退', self)
 
         back_button.triggered.connect(self.browser.back)
         tiaoxing_btn.triggered.connect(self.tiaoxing)
         sandian_btn.triggered.connect(self.sandian)
+        bing_btn.triggered.connect(self.bing)
 
         # 将按钮添加到导航栏上
         navigation_bar.addAction(back_button)
         navigation_bar.addAction(tiaoxing_btn)
         navigation_bar.addAction(sandian_btn)
+        navigation_bar.addAction(bing_btn)
 
 
 
