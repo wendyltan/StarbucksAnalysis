@@ -146,3 +146,43 @@ def draw_map(starbucks,continent='world',export=False,isTimeZone=False):
             off.plot(fig, image='jpeg',image_width=1920,image_height=1080, image_filename=continent.title())
         else:
             off.plot(fig, filename=continent.title() + '.html')
+
+#Brand Store Number Store Name  Ownership Type  Street Address  City
+#State/Province Country Postcode    Phone Number    Timezone
+#Longitude  Latitude
+
+
+def draw_map_by_country(starbucks):
+    data = [dict(
+        type='choropleth',
+        locations=starbucks['Country Code'],
+        z=starbucks['Country Num'],
+        text=starbucks['Country'],
+        colorscale=[[0, "rgb(5, 10, 172)"],  [0.5, "rgb(70, 100, 245)"],[0.7, "rgb(106, 137, 247)"],
+                    [1, "rgb(220, 220, 220)"]],
+        # colorscale = [[0,"rgb(139,0,0)"],[0.0006,"rgb(250,0,0)"],[0.06,"rgb(255,48,48)"],[1,"rgb(255,255,255)"]],
+        autocolorscale=False,
+        reversescale=True,
+        marker=dict(
+            line=dict(
+                color='rgb(255,255,255)',
+                width=0.25
+            )),
+        colorbar=dict(
+            title='Quantity'),
+    )]
+
+    layout = dict(
+        title='Starbucks In The World<br/>',
+        geo=dict(
+            showframe=False,
+            showcoastlines=False,
+            projection=dict(
+                type='Mercator'
+            )
+        )
+    )
+
+    fig = dict(data=data, layout=layout)
+    off.plot(fig, filename='requirement3.html')
+

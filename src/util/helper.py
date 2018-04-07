@@ -11,6 +11,7 @@ all help functions go into here
 
 import re
 import random
+import pycountry
 import pandas as pd
 from collections import Counter
 
@@ -99,3 +100,34 @@ def set_random_color_for_df(dataframe, column):
     color_df = pd.DataFrame(column_color_df)
     dataframe.insert(len(dataframe.columns),"Rgb Value",color_df)
     return dataframe
+
+def count_stabucks_quantity_for_df(starbucks):
+    """统计国家中starbucks数量，插入到原有的dataframe中返回"""
+    country = {}
+    country_name_for_df = []
+    country_name_df = {}
+    for country_name in starbucks["Country"]:
+        if country_name not in country:
+            country[country_name] = 1
+        if country_name in country:
+            country[country_name] = country[country_name] + 1
+    for country_name in starbucks['Country']:
+        country_name_for_df.append(country[country_name])
+    country_name_df["Country Num"] = country_name_for_df
+    num_df = pd.DataFrame(country_name_df)
+    starbucks.insert(len(starbucks.columns), "Country Num", num_df)
+    return starbucks
+
+def change_alpha2_to_alpha3_for_df(starbucks):
+    """原始数据中国家编码为alpha2不能用于画图，需要改为alpha3"""
+    alpha_2_to_3 = {}
+    country_code3_for_df = []
+    country_code3_df = {}
+    for c in list(pycountry.countries):
+        alpha_2_to_3[c.alpha_2] = c.alpha_3
+    for country_name in starbucks['Country']:
+        country_code3_for_df.append(alpha_2_to_3[country_name])
+    country_code3_df["Country Code"] = country_code3_for_df
+    code_df = pd.DataFrame(country_code3_df)
+    starbucks.insert(8,"Country Code",code_df)
+    return starbucks
