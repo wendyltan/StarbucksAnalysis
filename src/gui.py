@@ -1,36 +1,59 @@
-from tkinter import *
-from tkinter import ttk
-from src import main as ma
-# don't have to import main,use tk in main instead.
-class App():
-    def __init__(self,master):
-        #构造函数里传入一个父组件(master),创建一个Frame组件并显示
-        frame = Frame(master)
-        frame.pack()
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWebEngineWidgets import *
+import os
+from PyQt5.QtWidgets import *
 
-        # 文本框
-        #用于辅助调试下拉列表功能
-        name = StringVar()     # StringVar是Tk库内部定义的字符串变量类型，在这里用于管理部件上面的字符；不过一般用在按钮button上。改变StringVar，按钮上的文字也随之改变。
-        nameEntered = ttk.Entry(frame, width=12, textvariable=name)   # 创建一个文本框，定义长度为12个字符长度，并且将文本框中的内容绑定到上一句定义的name变量上，方便clickMe调用
-        #nameEntered.grid(column=0, row=1)       # 设置其在界面中出现的位置  column代表列   row 代表行
-        nameEntered.focus()     # 当程序运行时,光标默认会出现在该文本框中
-        nameEntered.pack()
+from src.util import genAllChart as g
 
-        # 创建一个下拉列表
-        #todo 使用这个下拉列表选择地图类型
-        number = StringVar()
-        numberChosen = ttk.Combobox(frame, width=12, textvariable=number)
-        numberChosen['values'] = ('条形图', '散点图')     # 设置下拉列表的值
-       # numberChosen.grid(column=1, row=1)      # 设置其在界面中出现的位置  column代表列   row 代表行
-        numberChosen.current(0)    # 设置下拉列表默认显示的值，0为 numberChosen['values'] 的下标值
-        numberChosen.pack()
+class MainWindow(QMainWindow):
 
-        #创建两个button，并作为frame的一部分
-        self.button = Button(frame, text="QUIT", fg="red", command=frame.quit)
-        self.button.pack() #此处side为LEFT表示将其放置 到frame剩余空间的最左方
-        self.tiao = Button(frame, text="Map", command=ma.sandian)
-        self.tiao.pack()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # 设置窗口标题
+        self.setWindowTitle('星巴克数据分析')
+        # 设置窗口图标
+        self.setWindowIcon(QIcon('icons/star.png'))
+        # 设置窗口大小
+        self.resize(1200, 800)
 
-    def say_hi(self):
-        print( "hi there, this is a class example!")
+        # 设置浏览器
+        self.browser = QWebEngineView()
+        url = os.path.abspath('icons/foobar.html')
+        # 指定打开界面的 URL
+        self.browser.setUrl(QUrl.fromLocalFile(url))
+        # 添加浏览器到窗口中
+        self.setCentralWidget(self.browser)
+
+        #adding menu...
+        menubar = self.menuBar()
+        self.fileMenu = menubar.addMenu('显示图表')
+        gen = g.Gen()
+        if gen.run():
+            # success
+            # get gen url name and map it into menu action
+            self.urlList = os.listdir(os.path.curdir + '/chartHtml')
+            for item in self.urlList:
+                itemAction = QAction(item.title().replace('.Html', ''), self)
+                itemAction.setCheckable(True)
+                itemAction.triggered.connect(self.showDataChart)
+                self.fileMenu.addAction(itemAction)
+        else:
+            print("You haven't generate chart html files yet!")
+
+        self.show()
+
+    def showDataChart(self):
+        #get actions
+        for action in self.fileMenu.actions():
+            if action.isChecked():
+                url = os.path.abspath("chartHtml/"+action.text()+'.html')
+                #remember to unchecked !
+                action.setChecked(False)
+                self.browser.load(QUrl.fromLocalFile(url))
+                self.setCentralWidget(self.browser)
+
+
+
+
 

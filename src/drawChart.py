@@ -33,9 +33,9 @@ def gen_Bar(datalist1,datalist2,title,export=False):
 
     fig = go.Figure(data=trace, layout=layout)
     if export:
-        off.plot(fig,image='jpeg',image_filename=title)
+        off.plot(fig,image='jpeg',image_filename=title,auto_open=False)
     else:
-        off.plot(fig, filename=title+'.html')
+        off.plot(fig, filename='chartHtml/'+title+'.html',auto_open=False)
 
 def gen_Scatter(datalist1,datalist2,title,export=False):
     """
@@ -56,7 +56,7 @@ def gen_Scatter(datalist1,datalist2,title,export=False):
     if export:
         off.plot(fig,image='jpeg',image_filename=title)
     else:
-        off.plot(fig, filename=title+'.html')
+        off.plot(fig, filename='chartHtml/'+title+'.html',auto_open=False)
 
 def gen_Pie(datalist1,datalist2,title,export=False):
     """
@@ -85,7 +85,7 @@ def gen_Pie(datalist1,datalist2,title,export=False):
     if export:
         off.plot(fig,image='jpeg',image_filename=title)
     else:
-        off.plot(fig, filename=title+'.html')
+        off.plot(fig, filename='chartHtml/'+title+'.html',auto_open=False)
 
 
 
@@ -143,16 +143,12 @@ def draw_map(starbucks,continent='world',export=False,isTimeZone=False):
 
         fig = dict(data=data,layout=layout)
         if export:
-            off.plot(fig, image='jpeg',image_width=1920,image_height=1080, image_filename=continent.title())
+            off.plot(fig, image='jpeg',image_width=1920,image_height=1080, image_filename=continent.title(),auto_open=False)
         else:
-            off.plot(fig, filename=continent.title() + '.html')
-
-#Brand Store Number Store Name  Ownership Type  Street Address  City
-#State/Province Country Postcode    Phone Number    Timezone
-#Longitude  Latitude
+            off.plot(fig, filename='chartHtml/'+continent.title() + '.html',auto_open=False)
 
 
-def draw_map_by_country(starbucks):
+def draw_map_by_country(starbucks,title="Default"):
     data = [dict(
         type='choropleth',
         locations=starbucks['Country Code'],
@@ -173,7 +169,7 @@ def draw_map_by_country(starbucks):
     )]
 
     layout = dict(
-        title='Starbucks In The World<br/>',
+        title=title,
         geo=dict(
             showframe=False,
             showcoastlines=False,
@@ -184,5 +180,5 @@ def draw_map_by_country(starbucks):
     )
 
     fig = dict(data=data, layout=layout)
-    off.plot(fig, filename='requirement3.html')
+    off.plot(fig, filename='chartHtml/'+title+'.html',auto_open=False)
 
