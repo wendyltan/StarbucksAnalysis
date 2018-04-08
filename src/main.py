@@ -6,11 +6,7 @@
 # @Software: PyCharm
 
 
-from collections import Counter
-from tkinter import Tk
-import pycountry
 import sys
-from pandas import DataFrame
 from src import gui as br
 
 if __name__ == '__main__':

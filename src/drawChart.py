@@ -145,7 +145,10 @@ def draw_map(starbucks,continent='world',export=False,isTimeZone=False):
         if export:
             off.plot(fig, image='jpeg',image_width=1920,image_height=1080, image_filename=continent.title(),auto_open=False)
         else:
-            off.plot(fig, filename='chartHtml/'+continent.title() + '.html',auto_open=False)
+            if isTimeZone:
+                off.plot(fig, filename='chartHtml/'+continent.title()+'-isTimeZone' + '.html',auto_open=False)
+            else:
+                off.plot(fig, filename='chartHtml/' + continent.title()+ '.html', auto_open=False)
 
 
 def draw_map_by_country(starbucks,title="Default"):

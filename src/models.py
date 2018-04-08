@@ -3,8 +3,6 @@
 auto generated file by
 sqlacodegen sqlite:///starbucks.db > models.py
 '''
-import inspect
-import re
 
 from sqlalchemy import Column, Integer, Table, Text
 from sqlalchemy.sql.sqltypes import NullType

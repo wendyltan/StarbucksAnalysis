@@ -18,7 +18,7 @@ class Gen():
         # 需求1按经纬度绘制散点图
         starbucks = qr.get_dataFrame(table)
         # 画世界/亚洲等范围的地图
-        dc.draw_map(qr.get_dataFrame(table), continent='asia', export=False)
+        dc.draw_map(starbucks,continent='world')
 
         # 需求2按时区绘制地图
         dc.draw_map(starbucks, continent='world', isTimeZone=True)
