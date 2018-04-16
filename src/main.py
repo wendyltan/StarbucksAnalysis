@@ -7,15 +7,19 @@
 
 
 import sys
+from src import query as qr
+from src import table
+from src.util import helper as hp
+from src import drawChart as dc
 from src import gui as br
 
 if __name__ == '__main__':
 
-    #程序主循环
-    app = br.QApplication(sys.argv)
-    window = br.MainWindow()
-    window.show()
-    app.exec_()
+    # #程序主循环
+    # app = br.QApplication(sys.argv)
+    # window = br.MainWindow()
+    # window.show()
+    # app.exec_()
 
 
     # 查询
@@ -45,6 +49,42 @@ if __name__ == '__main__':
     #
     # dc.gen_Pie(key4,value4,"国内前十个店铺最多的城市")
 
+    starbucks = qr.get_dataFrame(table)
+    # 测试数据：珠区经纬度
+    aimlat = 22.25
+    aimlng = 113.53
+    # 第3次迭代，需求2.1
+    # 输入数据：aimlat:目标纬度，aimlng:目标经度,k:查找点数量
+    # while True:
+    #     aimlat,aimlng = map(float,input("纬度，经度：").split())
+    #     if aimlat >= -90 and aimlat <= 90 and aimlng >= -180 and aimlng <= 180:
+    #         pass
+    #     else:
+    #         print("输入数据不合法！")
+    #         continue
+    #     k = int(input("K值："))
+    #     print(type(k))
+    #     if k > 0:
+    #         break
+    #     else:
+    #         print("输入数据不合法！")
+    #         continue
+    # hp.top_k(aimlat, aimlng, starbucks, k)
 
+    # 第3次迭代，需求2.2
+    # while True:
+    #     aimlat,aimlng = map(float,input("纬度，经度：").split())
+    #     if aimlat >= -90 and aimlat <= 90 and aimlng >= -180 and aimlng <= 180:
+    #         pass
+    #     else:
+    #         print("输入数据不合法！")
+    #         continue
+    # x_k = []
+    # y_time = []
+    # for k in range(1,11):
+    #     t = hp.top_k(aimlat,aimlng,starbucks,k,isShowInfo=False,isReturnTime=True)
+    #     x_k.append(k)
+    #     y_time.append(t)
+    # dc.gen_Bar(x_k,y_time,"随着K值得增长查询时延的变化",isOpen=True)
 
 

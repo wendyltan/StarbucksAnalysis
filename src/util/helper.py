@@ -11,6 +11,8 @@ all help functions go into here
 
 import re
 import random
+import math
+import time
 import pycountry
 import pandas as pd
 from collections import Counter
@@ -131,3 +133,58 @@ def change_alpha2_to_alpha3_for_df(starbucks):
     code_df = pd.DataFrame(country_code3_df)
     starbucks.insert(8,"Country Code",code_df)
     return starbucks
+
+def distance(lat1,lng1,lat2,lng2):
+    """已知两点经纬度，计算距离"""
+    radlat1 = math.radians(lat1)
+    radlat2 = math.radians(lat2)
+    a = radlat1 - radlat2
+    b = math.radians(lng1) - math.radians(lng2)
+    s = 2*math.asin(math.sqrt(math.pow(math.sin(a/2),2)+math.cos(radlat1)*math.cos(radlat2)*math.pow(math.sin(b/2),2)))
+    earth_radius = 6378.137
+    s = s*earth_radius
+    if s < 0:
+        return -s
+    else:
+        return s
+
+def top_k(aimlat,aimlng,starbucks,k=1,isShowInfo=True,isReturnTime=False):
+    startime = time.time()
+    latlist = list(starbucks["Latitude"])
+    lnglist = list(starbucks["Longitude"])
+    lat_lng = list(zip(latlist, lnglist))
+    k_key = str(k)
+    # 去除经纬度为空的数据
+    for lat,lng in lat_lng:
+        if lat == '' or lng == '':
+            lat_lng.remove((lat,lng))
+    k_list = []
+    while k > 0:
+        MinDistance = -1
+        for lat,lng in lat_lng:
+            lat = float(lat)
+            lng = float(lng)
+            two_distance = distance(lat,lng,aimlat,aimlng)
+            if MinDistance == -1:
+                MinDistance = two_distance
+                Minlat = lat
+                Minlng = lng
+            if two_distance < MinDistance:
+                MinDistance = two_distance
+                Minlat = lat
+                Minlng = lng
+        k_list.append((Minlat,Minlng))
+        lat_lng.remove((str(Minlat),str(Minlng)))
+        k -= 1
+    if isShowInfo:
+        for x in k_list:
+            print(x)
+            index = starbucks[(starbucks.Latitude == str(x[0])) & (starbucks.Longitude == str(x[1]))].index.tolist()
+            print(starbucks.loc[index])
+    endtime = time.time()
+    t = endtime - startime
+    print("K="+k_key+"的查询时延：%.3f%s" % (t, 's'))
+    if isReturnTime:
+        t = round(t, 3)
+        return t
+

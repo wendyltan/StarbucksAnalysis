@@ -15,15 +15,15 @@ class Gen():
     do not put this long smelly code in main. Use a class as a module import  instead
     """
     def run(self):
-        # 需求1按经纬度绘制散点图
+        # 第2次迭代，需求1按经纬度绘制散点图
         starbucks = qr.get_dataFrame(table)
         # 画世界/亚洲等范围的地图
         dc.draw_map(starbucks,continent='world')
 
-        # 需求2按时区绘制地图
+        # 第2次迭代，需求2按时区绘制地图
         dc.draw_map(starbucks, continent='world', isTimeZone=True)
 
-        # 需求2按时区绘制条形图
+        # 第2次迭代，需求2按时区绘制条形图
         timezone = {}
         x_timezone = []
         y_number = []
@@ -42,12 +42,12 @@ class Gen():
             y_number.append(item[1])
         dc.gen_Bar(x_timezone, y_number, "统计每个时区中星巴克的数量")
 
-        # 需求3按国家中星巴克数量绘制地图
+        # 第2次迭代，需求3按国家中星巴克数量绘制地图
         starbucks = hp.count_stabucks_quantity_for_df(starbucks)
         starbucks = hp.change_alpha2_to_alpha3_for_df(starbucks)
         dc.draw_map_by_country(starbucks, title="全世界各国星巴克数量")
 
-        # 需求4按国家中星巴克数量绘制条形图
+        # 第2次迭代，需求4按国家中星巴克数量绘制条形图
         country = {}
         x_country = []
         y_number = []

@@ -12,7 +12,7 @@ import plotly.offline as off
 from src.util import helper as hp
 
 
-def gen_Bar(datalist1,datalist2,title,export=False):
+def gen_Bar(datalist1,datalist2,title,export=False,isOpen=False):
     """
     绘制条形图
     :param datalist1:
@@ -33,11 +33,11 @@ def gen_Bar(datalist1,datalist2,title,export=False):
 
     fig = go.Figure(data=trace, layout=layout)
     if export:
-        off.plot(fig,image='jpeg',image_filename=title,auto_open=False)
+        off.plot(fig,image='jpeg',image_filename=title,auto_open=isOpen)
     else:
-        off.plot(fig, filename='chartHtml/'+title+'.html',auto_open=False)
+        off.plot(fig, filename='chartHtml/'+title+'.html',auto_open=isOpen)
 
-def gen_Scatter(datalist1,datalist2,title,export=False):
+def gen_Scatter(datalist1,datalist2,title,export=False,isOpen=False):
     """
     绘制散点图
     :param datalist1:
@@ -56,9 +56,9 @@ def gen_Scatter(datalist1,datalist2,title,export=False):
     if export:
         off.plot(fig,image='jpeg',image_filename=title)
     else:
-        off.plot(fig, filename='chartHtml/'+title+'.html',auto_open=False)
+        off.plot(fig, filename='chartHtml/'+title+'.html',auto_open=isOpen)
 
-def gen_Pie(datalist1,datalist2,title,export=False):
+def gen_Pie(datalist1,datalist2,title,export=False,isOpen=False):
     """
     绘制饼图
     :param datalist1:
@@ -85,11 +85,11 @@ def gen_Pie(datalist1,datalist2,title,export=False):
     if export:
         off.plot(fig,image='jpeg',image_filename=title)
     else:
-        off.plot(fig, filename='chartHtml/'+title+'.html',auto_open=False)
+        off.plot(fig, filename='chartHtml/'+title+'.html',auto_open=isOpen)
 
 
 
-def draw_map(starbucks,continent='world',export=False,isTimeZone=False):
+def draw_map(starbucks,continent='world',export=False,isTimeZone=False,isOpen=False):
     """
     传入DataFrame的starbucks和洲名，在地图上标出所有点
     :param starbucks:星巴克的所有列数据
@@ -143,15 +143,16 @@ def draw_map(starbucks,continent='world',export=False,isTimeZone=False):
 
         fig = dict(data=data,layout=layout)
         if export:
-            off.plot(fig, image='jpeg',image_width=1920,image_height=1080, image_filename=continent.title(),auto_open=False)
+            off.plot(fig, image='jpeg',image_width=1920,image_height=1080,
+                     image_filename=continent.title(),auto_open=isOpen)
         else:
             if isTimeZone:
-                off.plot(fig, filename='chartHtml/'+continent.title()+'-isTimeZone' + '.html',auto_open=False)
+                off.plot(fig, filename='chartHtml/'+continent.title()+'-isTimeZone' + '.html',auto_open=isOpen)
             else:
-                off.plot(fig, filename='chartHtml/' + continent.title()+ '.html', auto_open=False)
+                off.plot(fig, filename='chartHtml/' + continent.title()+ '.html', auto_open=isOpen)
 
 
-def draw_map_by_country(starbucks,title="Default"):
+def draw_map_by_country(starbucks,title="Default",isOpen=False):
     data = [dict(
         type='choropleth',
         locations=starbucks['Country Code'],
@@ -183,5 +184,5 @@ def draw_map_by_country(starbucks,title="Default"):
     )
 
     fig = dict(data=data, layout=layout)
-    off.plot(fig, filename='chartHtml/'+title+'.html',auto_open=False)
+    off.plot(fig, filename='chartHtml/'+title+'.html',auto_open=isOpen)
 
