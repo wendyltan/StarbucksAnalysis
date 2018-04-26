@@ -14,7 +14,7 @@ class Gen():
     """
     do not put this long smelly code in main. Use a class as a module import  instead
     """
-    def run(self):
+    def run(self, a, b, c):
         # 第2次迭代，需求1按经纬度绘制散点图
         starbucks = qr.get_dataFrame(table)
         # 画世界/亚洲等范围的地图
@@ -60,6 +60,27 @@ class Gen():
             x_country.append(item[0])
             y_number.append(item[1])
         dc.gen_Bar(x_country, y_number, "统计每个国家拥有的星巴克数量")
+        # 第3次迭代，需求2.2
 
+        if(a ==0 and b == 0):
+            aimlat =1
+            aimlng =1
+        else:
+            aimlng = a
+            aimlat = b
+        starbucks = qr.get_dataFrame(table)
+        while True:
+            if aimlat >= -90 and aimlat <= 90 and aimlng >= -180 and aimlng <= 180:
+                break
+            else:
+                print("输入数据不合法！")
+                break
+        x_k = []
+        y_time = []
+        for k in range(1,c+1):
+            t = hp.top_k(aimlat,aimlng,starbucks,k,isShowInfo=False,isReturnTime=True)
+            x_k.append(k)
+            y_time.append(t)
+        dc.gen_Bar(x_k,y_time,"随着K值得增长查询时延的变化",isOpen=False)
         print("All chartHtml generate success!")
         return True
