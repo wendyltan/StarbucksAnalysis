@@ -17,8 +17,8 @@ A analytical project for Starbucks dataset
 ## 历史开发进度
 - 18/4/26:
     + **jasonli**修改了`gui.py`，给界面加入输入框以获取地址和k值，输入框同时有显示错误信息作用。将需求2.2整合进`genAllChart.py`，修改了该类的run()函数。
-    + **huangyep**完成了第三次迭代三个绘图的代码。
-    + **jasonli**和**huangyep**对界面和绘图的代码进行整合，程序可用，但代码风格不统一，修改困难。
+    + **huangyep**完成了第三次迭代三个绘图的代码。
+    + **jasonli**和**huangyep**对界面和绘图的代码进行整合，程序可用，但代码风格不统一，修改困难。
 - 18/4/7: 
     + **huangyep** 添加了新的图表函数，基本完成需求
     + **jasonli** 加入`qt_browser.py`文件，尝试pyqt实现浏览图表网页的功能，但是只能打开已保存的本地网页，不能实时生成，与main.py的关联有些问题。这些地图都是可以操作的动态页面，而非静态图片。
