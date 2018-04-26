@@ -17,10 +17,10 @@ from src import gui as br
 if __name__ == '__main__':
 
     # #程序主循环
-    # app = br.QApplication(sys.argv)
-    # window = br.MainWindow()
-    # window.show()
-    # app.exec_()
+    app = br.QApplication(sys.argv)
+    window = br.MainWindow()
+    window.show()
+    app.exec_()
 
 
     # 查询
@@ -56,10 +56,10 @@ if __name__ == '__main__':
     aimlng = 113.53
     k = 5
 
-    # 第3次迭代，需求1
+    #第3次迭代，需求1
     # timezone = hp.timezone_statistics(starbucks)
     # starbucks = hp.set_timezone_color(starbucks,timezone)
-    # dc.draw_map(starbucks,isTimeZone=True,isOpen=True)
+    # dc.draw_map(starbucks,isTimeZone=True,isOpen=False,export=False,newtitle="topk.html")
 
     # 第3次迭代，需求2.1
     # 输入数据：aimlat:目标纬度，aimlng:目标经度,k:查找点数量
@@ -76,7 +76,7 @@ if __name__ == '__main__':
     #     else:
     #         print("输入数据不合法！")
     #         continue
-    # hp.top_k(aimlat, aimlng, starbucks, k,isShowInfo=True)
+    #hp.top_k(aimlat, aimlng, starbucks, k,isShowInfo=True)
 
     # 第3次迭代，需求2.2
     # while True:

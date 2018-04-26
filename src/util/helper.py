@@ -249,7 +249,7 @@ def top_k(aimlat,aimlng,starbucks,k=1,isShowInfo=True,isReturnTime=False):
                          str(starbucks.iloc[index[0],3]),str(starbucks.iloc[index[0],4])]
             i += 1
         # print(df.head())
-        dc.draw_map(df,isOpen=True,size=15)
+        dc.draw_map(df,isOpen=False,size=15,newtitle="2.1 k points around the location",export=False)
     endtime = time.time()
     t = endtime - startime
     print("K="+k_key+"的查询时延：%.3f%s" % (t, 's'))

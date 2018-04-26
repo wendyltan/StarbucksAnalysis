@@ -37,6 +37,7 @@ class MainWindow(QMainWindow):
         self.fileMenu = menubar.addMenu('显示图表')
         self.btn = QPushButton('top_k', self)
         self.btn.setGeometry(70, 0, 60, 25)
+        self.btn.clicked.connect(self.show_top_k)
 
         self.btn2 = QPushButton('k变化', self)
         self.btn2.setGeometry(130, 0, 60, 25)
@@ -80,7 +81,10 @@ class MainWindow(QMainWindow):
         #action.setChecked(False)
         self.browser.load(QUrl.fromLocalFile(url))
         self.setCentralWidget(self.browser)
-
+    def show_top_k(self):
+        url = os.path.abspath("chartHtml/2.1 k points around the location.html")
+        self.browser.load(QUrl.fromLocalFile(url))
+        self.setCentralWidget(self.browser)
     def navigate_to_url(self):
         gen2 = g.Gen()
         q = self.urlbar.text()

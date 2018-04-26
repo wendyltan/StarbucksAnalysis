@@ -89,7 +89,7 @@ def gen_Pie(datalist1,datalist2,title,export=False,isOpen=False):
 
 
 
-def draw_map(starbucks,continent='world',export=False,isTimeZone=False,isOpen=False,size=3):
+def draw_map(starbucks,continent='world',export=False,isTimeZone=False,isOpen=False,size=3,newtitle="Starbucks in the World"):
     """
     传入DataFrame的starbucks和洲名，在地图上标出所有点
     :param starbucks:星巴克的所有列数据
@@ -127,7 +127,7 @@ def draw_map(starbucks,continent='world',export=False,isTimeZone=False,isOpen=Fa
             ))]
 
         layout = dict(
-                title='Starbucks in the '+ continent.title() + '<br>',
+                title=newtitle + '<br>',
                 geo=dict(
                     scope=continent,
                     showcountries=True,
@@ -146,9 +146,9 @@ def draw_map(starbucks,continent='world',export=False,isTimeZone=False,isOpen=Fa
                      image_filename=continent.title(),auto_open=isOpen)
         else:
             if isTimeZone:
-                off.plot(fig, filename='chartHtml/'+continent.title()+'-isTimeZone' + '.html',auto_open=isOpen)
+                off.plot(fig, filename='chartHtml/'+ newtitle + '-isTimeZone' + '.html',auto_open=isOpen)
             else:
-                off.plot(fig, filename='chartHtml/' + continent.title()+ '.html', auto_open=isOpen)
+                off.plot(fig, filename='chartHtml/' + newtitle + '.html', auto_open=isOpen)
 
 
 def draw_map_by_country(starbucks,title="Default",isOpen=False):
