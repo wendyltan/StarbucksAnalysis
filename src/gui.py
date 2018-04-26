@@ -49,6 +49,8 @@ class MainWindow(QMainWindow):
         self.urlbar.returnPressed.connect(self.navigate_to_url)
         navigation_bar.addSeparator()
         navigation_bar.addWidget(self.urlbar)
+        if(not os.path.exists(os.path.curdir + '\\chartHtml\\')):
+            os.mkdir(os.path.curdir + '\\chartHtml\\')
         if self.gen.run(0,0,0):
             # success
             # get gen url name and map it into menu action
