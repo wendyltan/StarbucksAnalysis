@@ -15,9 +15,11 @@ A analytical project for Starbucks dataset
  - dataset :原始数据excel文件目录
 
 ## 历史开发进度
+- 18/4/26:
+    + **jasonli**修改了`gui.py`，给界面加入输入框以获取地址和k值，输入框同时有显示错误信息作用。将需求2.2整合进`genAllChart.py`，修改了该类的run()函数。
 - 18/4/7: 
     + **huangyep** 添加了新的图表函数，基本完成需求
-    + **jasonli** 加入`qt_browser.py'文件，尝试pyqt实现浏览图表网页的功能，但是只能打开已保存的本地网页，不能实时生成，与main.py的关联有些问题。这些地图都是可以操作的动态页面，而非静态图片。
+    + **jasonli** 加入`qt_browser.py`文件，尝试pyqt实现浏览图表网页的功能，但是只能打开已保存的本地网页，不能实时生成，与main.py的关联有些问题。这些地图都是可以操作的动态页面，而非静态图片。
     + **Wendy**修改界面，用菜单action的方式显示图表。更新了图片html静默生成，不会自动弹出。思路是先生成再用qt去load，但是*非常卡顿*,使用pyinstaller打包失败
     
 - 18/3/25: 
