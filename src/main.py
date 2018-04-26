@@ -9,6 +9,7 @@
 import sys
 from src import query as qr
 from src import table
+import pandas as pd
 from src.util import helper as hp
 from src import drawChart as dc
 from src import gui as br
@@ -53,35 +54,41 @@ if __name__ == '__main__':
     # 测试数据：珠区经纬度
     aimlat = 22.25
     aimlng = 113.53
+    k = 5
+
+    # 第3次迭代，需求1
+    # timezone = hp.timezone_statistics(starbucks)
+    # starbucks = hp.set_timezone_color(starbucks,timezone)
+    # dc.draw_map(starbucks,isTimeZone=True,isOpen=True)
+
     # 第3次迭代，需求2.1
     # 输入数据：aimlat:目标纬度，aimlng:目标经度,k:查找点数量
     # while True:
     #     aimlat,aimlng = map(float,input("纬度，经度：").split())
     #     if aimlat >= -90 and aimlat <= 90 and aimlng >= -180 and aimlng <= 180:
-    #         pass
+    #         break
     #     else:
     #         print("输入数据不合法！")
     #         continue
     #     k = int(input("K值："))
-    #     print(type(k))
     #     if k > 0:
     #         break
     #     else:
     #         print("输入数据不合法！")
     #         continue
-    # hp.top_k(aimlat, aimlng, starbucks, k)
+    # hp.top_k(aimlat, aimlng, starbucks, k,isShowInfo=True)
 
     # 第3次迭代，需求2.2
     # while True:
     #     aimlat,aimlng = map(float,input("纬度，经度：").split())
     #     if aimlat >= -90 and aimlat <= 90 and aimlng >= -180 and aimlng <= 180:
-    #         pass
+    #         break
     #     else:
     #         print("输入数据不合法！")
     #         continue
     # x_k = []
     # y_time = []
-    # for k in range(1,11):
+    # for k in range(1,31):
     #     t = hp.top_k(aimlat,aimlng,starbucks,k,isShowInfo=False,isReturnTime=True)
     #     x_k.append(k)
     #     y_time.append(t)

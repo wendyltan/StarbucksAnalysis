@@ -89,7 +89,7 @@ def gen_Pie(datalist1,datalist2,title,export=False,isOpen=False):
 
 
 
-def draw_map(starbucks,continent='world',export=False,isTimeZone=False,isOpen=False):
+def draw_map(starbucks,continent='world',export=False,isTimeZone=False,isOpen=False,size=3):
     """
     传入DataFrame的starbucks和洲名，在地图上标出所有点
     :param starbucks:星巴克的所有列数据
@@ -104,7 +104,6 @@ def draw_map(starbucks,continent='world',export=False,isTimeZone=False,isOpen=Fa
         use_color = 'rgb(141, 211, 199)'
     else:
         starbucks['text'] = starbucks["Store Name"] + ',' + starbucks["Timezone"]
-        starbucks = hp.set_random_color_for_df(starbucks, "Timezone")
         use_color = starbucks["Rgb Value"]
 
     #判断地图范围参数是否有效
@@ -119,7 +118,7 @@ def draw_map(starbucks,continent='world',export=False,isTimeZone=False,isOpen=Fa
             text=starbucks['text'],
             mode='markers',
             marker=dict(
-                size=3,
+                size=size,
                 opacity=0.8,
                 reversescale=True,
                 autocolorscale=False,

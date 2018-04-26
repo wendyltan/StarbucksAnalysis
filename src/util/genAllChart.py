@@ -21,6 +21,7 @@ class Gen():
         dc.draw_map(starbucks,continent='world')
 
         # 第2次迭代，需求2按时区绘制地图
+        hp.set_random_color_for_df(starbucks,"Timezone")
         dc.draw_map(starbucks, continent='world', isTimeZone=True)
 
         # 第2次迭代，需求2按时区绘制条形图

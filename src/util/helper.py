@@ -16,6 +16,7 @@ import time
 import pycountry
 import pandas as pd
 from collections import Counter
+from src import drawChart as dc
 
 
 def row_into_list(result):
@@ -134,6 +135,65 @@ def change_alpha2_to_alpha3_for_df(starbucks):
     starbucks.insert(8,"Country Code",code_df)
     return starbucks
 
+def timezone_statistics(starbucks):
+    """统计每个时区中的店铺数量，返回timezone字典，字典键-值：时区名称-店铺数量"""
+    timezone = {}
+    for timezone_name in starbucks["Timezone"]:
+        if timezone_name not in timezone:
+            timezone[timezone_name] = 1
+        if timezone_name in timezone:
+            timezone[timezone_name] = timezone[timezone_name] + 1
+    return timezone
+
+def min_in_dict(dict_name):
+    """前提条件：字典的键为数值。取键值最小的数据返回"""
+    min_num = -1
+    for num in dict_name.keys():
+        if min_num == -1:
+            min_num = num
+        if num < min_num:
+            min_num = num
+    min_item_value = dict_name.pop(min_num)
+    return min_num, min_item_value
+
+def set_timezone_color(starbucks,timezone):
+    """设置时区的颜色，并作为一列数据插入dataframe中。然后调用draw_map，实现直接根据点的颜色画图"""
+    # 由于数据值大的和小的之间间隔太大，而且在数据值小的地方比较密集，所以采用了直接赋值的方法
+
+    rgb_value = {
+        20: "rgb(0,248,255)",
+        50: "rgb(10,217,255)",
+        100: "rgb(20,186,255)",
+        200: "rgb(31,155,255)",
+        500: "rgb(41,124,255)",
+        800: "rgb(51,93,225)",
+        1500:"rgb(61,62,255)",
+        3000:"rgb(71,31,255)",
+        4890: "rgb(81,0,255)",
+    }
+    # tz_rgb字典，键-值:时区-RGB
+    tz_rgb = {}
+    min_num, rgb_color = min_in_dict(rgb_value)
+    for key, item in sorted(timezone.items(), key=lambda item: item[1], reverse=False):
+        if item <= min_num:
+            tz_rgb[key] = rgb_color
+        if item > min_num:
+            while True:
+                min_num, rgb_color = min_in_dict(rgb_value)
+                if float(item) < min_num:
+                    tz_rgb[key] = rgb_color
+                    break
+                else:
+                    continue
+    tz_color_for_df = []
+    tz_color_df = {}
+    for timezone in starbucks["Timezone"]:
+        tz_color_for_df.append(tz_rgb[timezone])
+    tz_color_df["Rgb Value"] = tz_color_for_df
+    color_df = pd.DataFrame(tz_color_df)
+    starbucks.insert(len(starbucks.columns), "Rgb Value", color_df)
+    return starbucks
+
 def distance(lat1,lng1,lat2,lng2):
     """已知两点经纬度，计算距离"""
     radlat1 = math.radians(lat1)
@@ -149,6 +209,7 @@ def distance(lat1,lng1,lat2,lng2):
         return s
 
 def top_k(aimlat,aimlng,starbucks,k=1,isShowInfo=True,isReturnTime=False):
+    """实现需求的Top—k函数"""
     startime = time.time()
     latlist = list(starbucks["Latitude"])
     lnglist = list(starbucks["Longitude"])
@@ -177,10 +238,18 @@ def top_k(aimlat,aimlng,starbucks,k=1,isShowInfo=True,isReturnTime=False):
         lat_lng.remove((str(Minlat),str(Minlng)))
         k -= 1
     if isShowInfo:
+        # 新建一个小的dataframe,只包含符合条件的Starbuck的数据
+        df = pd.DataFrame(columns=("City", "Store Name", "Latitude", "Longitude"))
+        i = 0
         for x in k_list:
             print(x)
             index = starbucks[(starbucks.Latitude == str(x[0])) & (starbucks.Longitude == str(x[1]))].index.tolist()
-            print(starbucks.loc[index])
+            # 给df插入数据
+            df.loc[i] = [str(starbucks.iloc[index[0],1]),str(starbucks.iloc[index[0],9]),
+                         str(starbucks.iloc[index[0],3]),str(starbucks.iloc[index[0],4])]
+            i += 1
+        # print(df.head())
+        dc.draw_map(df,isOpen=True,size=15)
     endtime = time.time()
     t = endtime - startime
     print("K="+k_key+"的查询时延：%.3f%s" % (t, 's'))
