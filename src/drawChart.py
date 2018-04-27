@@ -25,7 +25,6 @@ def gen_Bar(datalist1,datalist2,title,export=False,isOpen=False):
     :param export:
     :return:
     """
-
     trace = [go.Bar(
         x=datalist1,
         y=datalist2,
@@ -93,9 +92,8 @@ def gen_Pie(datalist1,datalist2,title,export=False,isOpen=False):
 
 
 
-def draw_map(starbucks,continent='world',export=False,isTimeZone=False,isOpen=False,size=3,newtitle="Starbucks in the World",
-             enter_la=22.25,enter_lon= 113.53,mode='mapbox'):
-
+def draw_map(starbucks,continent='world',export=False,isTimeZone=False,isOpen=False,scl=0,size=3,
+             newtitle="Starbucks in the World",enter_la=22.25,enter_lon= 113.53,mode='mapbox'):
     #是否根据时区筛选
     if not isTimeZone:
         starbucks['text'] = starbucks['City'] + ',' + starbucks["Store Name"]
@@ -111,19 +109,40 @@ def draw_map(starbucks,continent='world',export=False,isTimeZone=False,isOpen=Fa
         fig = None
         if(mode=="mapbox"):
             #draw mapbox
-            data = go.Data([
-                go.Scattermapbox(
-                    lat=starbucks['Latitude'],
-                    lon=starbucks['Longitude'],
-                    mode='markers',
-                    marker=go.Marker(
-                        size=size,
-                        color=use_color,
-                        opacity=0.7
-                    ),
-                    text=starbucks['text'],
-                )
-            ])
+            if scl != 0:
+                data = go.Data([
+                    go.Scattermapbox(
+                        lat=starbucks['Latitude'],
+                        lon=starbucks['Longitude'],
+                        mode='markers',
+                        marker=go.Marker(
+                            # reversescale = True,
+                            colorscale = scl,
+                            cmin = 0,
+                            # cmax = starbucks[""].max(),
+                            cmax = 5000,
+                            size=size,
+                            color=use_color,
+                            opacity=0.7,
+                            colorbar = dict(title=newtitle)
+                        ),
+                        text=starbucks['text'],
+                    )
+                ])
+            else:
+                data = go.Data([
+                    go.Scattermapbox(
+                        lat=starbucks['Latitude'],
+                        lon=starbucks['Longitude'],
+                        mode='markers',
+                        marker=go.Marker(
+                            size=size,
+                            color=use_color,
+                            opacity=0.7
+                        ),
+                        text=starbucks['text'],
+                    )
+                ])
 
             layout = go.Layout(
                 autosize=True,

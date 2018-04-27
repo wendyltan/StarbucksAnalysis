@@ -177,7 +177,7 @@ def set_timezone_color(starbucks,timezone):
         800: "rgb(51,93,225)",
         1500:"rgb(61,62,255)",
         3000:"rgb(71,31,255)",
-        4890: "rgb(81,0,255)",
+        5000: "rgb(81,0,255)",
     }
     # tz_rgb字典，键-值:时区-RGB
     tz_rgb = {}

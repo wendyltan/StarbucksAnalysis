@@ -60,7 +60,10 @@ class Gen():
         starbucks.pop("Rgb Value")
         timezone = hp.count_number_to_dict(starbucks,"Timezone")
         starbucks = hp.set_timezone_color(starbucks,timezone)
-        dc.draw_map(starbucks,isTimeZone=True,isOpen=False,export=False,newtitle="1.1 timezone")
+        scl = [[0, "rgb(0,248,255)"],[0.01, "rgb(10,217,255)"],[0.02, "rgb(20,186,255)"],
+               [0.04, "rgb(31,155,255)"],[0.1, "rgb(41,124,255)"],[0.16, "rgb(51,93,225)"],
+               [0.3, "rgb(61,62,255)"],[0.6, "rgb(71,31,255)"],[1, "rgb(81,0,255)"]]
+        dc.draw_map(starbucks,isTimeZone=True,isOpen=False,scl=scl,export=False,newtitle="1.1 timezone")
 
         # 第3次迭代，需求2.1
         if(a ==0 and b == 0):
