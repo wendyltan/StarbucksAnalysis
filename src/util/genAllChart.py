@@ -17,7 +17,6 @@ class Gen():
     def run(self, a, b, c):
         # 第2次迭代，需求1按经纬度绘制散点图
         starbucks = qr.get_dataFrame(table)
-        starbucks2 = qr.get_dataFrame(table)
         # 画世界/亚洲等范围的地图
         dc.draw_map(starbucks,continent='world')
 
@@ -26,14 +25,9 @@ class Gen():
         dc.draw_map(starbucks, continent='world', isTimeZone=True)
 
         # 第2次迭代，需求2按时区绘制条形图
-        timezone = {}
+        timezone = hp.count_number_to_dict(starbucks,"Timezone")
         x_timezone = []
         y_number = []
-        for timezone_name in starbucks["Timezone"]:
-            if timezone_name not in timezone:
-                timezone[timezone_name] = 1
-            if timezone_name in timezone:
-                timezone[timezone_name] = timezone[timezone_name] + 1
         # 不排序
         for key, value in timezone.items():
             x_timezone.append(key)
@@ -64,7 +58,7 @@ class Gen():
         dc.gen_Bar(x_country, y_number, "统计每个国家拥有的星巴克数量")
         # 第3次迭代，需求1
         starbucks.pop("Rgb Value")
-        timezone = hp.timezone_statistics(starbucks)
+        timezone = hp.count_number_to_dict(starbucks,"Timezone")
         starbucks = hp.set_timezone_color(starbucks,timezone)
         dc.draw_map(starbucks,isTimeZone=True,isOpen=False,export=False,newtitle="1.1 timezone")
 
@@ -75,24 +69,10 @@ class Gen():
         else:
             aimlng = a
             aimlat = b
-        #输入数据：aimlat:目标纬度，aimlng:目标经度,k:查找点数量
-        # while True:
-        #  #aimlat,aimlng = map(float,input("纬度，经度：").split())
-        #      if aimlat >= -90 and aimlat <= 90 and aimlng >= -180 and aimlng <= 180:
-        #          break
-        #      else:
-        #          print("输入数据不合法！")
-        #          continue
         k = c + 1
-        #      if k > 0:
-        #          break
-        #      else:
-        #          print("输入数据不合法！")
-        #          continue
         hp.top_k(aimlat, aimlng, starbucks, k,isShowInfo=True)
 
         # 第3次迭代，需求2.2
-
         starbucks = qr.get_dataFrame(table)
         while True:
             if aimlat >= -90 and aimlat <= 90 and aimlng >= -180 and aimlng <= 180:

@@ -1,20 +1,24 @@
 # StarbucksAnalysis
-A analytical project for Starbucks dataset
-
-
+An analytical project for Starbucks dataset
 ## Index/src
  - util :工具类所在目录
     - csv2xlsx :csv格式转xlsx格式
-    - excel2sql: xlsx转sqlite db格式。
     - helper: 一些在模块中反复使用的函数
+    - genAllChart:请在此类编写生成图表的逻辑
  - drawChart :画图模块，大部分画图函数请放在这里
  - models:数据库模型类，使用sqlcodegen 生成的请勿改动
  - query :请在这里编写大部分查询数据的函数
  - main :主模块
  - init :初始化
  - dataset :原始数据excel文件目录
+ - chartHtml :保存图表html的文件夹
+## Usage
+Run `main.py`
 
 ## 历史开发进度
+- 18/4/27:
+    + **Wendy**将`helper`部分函数抽象，删掉不必要的注释以及py文件，消减程序赘余
+    
 - 18/4/26:
     + **jasonli**修改了`gui.py`，给界面加入输入框以获取地址和k值，输入框同时有显示错误信息作用。将需求2.2整合进`genAllChart.py`，修改了该类的run()函数。
     + **huangyep**完成了第三次迭代三个绘图的代码。

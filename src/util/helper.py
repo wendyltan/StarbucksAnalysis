@@ -78,6 +78,26 @@ def get_seperate_list(raw_result):
         i = 0
         j += 1
 
+def dataFrame_Construct(oldDataFrame,dataColumnName,newColumnName,insertList,insertDict,dataDict,insertColumnNum):
+    """
+    easily contruct a new dataframe with one new column for u
+    :param oldDataFrame:  your old dataframe name
+    :param dataColumnName: your loop data column name
+    :param newColumnName:  new column name that u want to insert to the dataframe
+    :param insertList:  use to add as a value latter in insertDict
+    :param insertDict:  dict that u want to transform into a dataframe
+    :param dataDict:   your data as a dict
+    :param insertColumnNum: which column will u want to insert into the old dataframe
+    :return:
+    """
+
+    for column_value in oldDataFrame[dataColumnName]:
+        insertList.append(dataDict[column_value])
+    insertDict[newColumnName] = insertList
+    df = pd.DataFrame(insertDict)
+    oldDataFrame.insert(insertColumnNum, newColumnName,df)
+    return oldDataFrame
+
 
 def set_random_color_for_df(dataframe, column):
     """
@@ -97,29 +117,31 @@ def set_random_color_for_df(dataframe, column):
         rgb_value = "rgb(" + str(r) + "," + str(g) + "," + str(b) + ")"
         if column_value not in column_color.keys() and rgb_value not in column_color.values():
             column_color[column_value] = rgb_value
-    for column_value in dataframe[column]:
-        column_color_for_df.append(column_color[column_value])
-    column_color_df["Rgb Value"] = column_color_for_df
-    color_df = pd.DataFrame(column_color_df)
-    dataframe.insert(len(dataframe.columns),"Rgb Value",color_df)
-    return dataframe
+
+    return dataFrame_Construct(dataframe,column,"Rgb Value",column_color_for_df,column_color_df,column_color,len(dataframe.columns))
 
 def count_stabucks_quantity_for_df(starbucks):
     """统计国家中starbucks数量，插入到原有的dataframe中返回"""
-    country = {}
+    country = count_number_to_dict(starbucks,"Country")
     country_name_for_df = []
     country_name_df = {}
-    for country_name in starbucks["Country"]:
-        if country_name not in country:
-            country[country_name] = 1
-        if country_name in country:
-            country[country_name] = country[country_name] + 1
-    for country_name in starbucks['Country']:
-        country_name_for_df.append(country[country_name])
-    country_name_df["Country Num"] = country_name_for_df
-    num_df = pd.DataFrame(country_name_df)
-    starbucks.insert(len(starbucks.columns), "Country Num", num_df)
-    return starbucks
+
+    return dataFrame_Construct(starbucks,'Country',"Country Num",country_name_for_df,country_name_df,country,len(starbucks.columns))
+
+def count_number_to_dict(dataFrame,dataFrameColumnName):
+    """
+    count one column of dataframe and return data in this column as a dict
+    :param dataFrame:  your dataframe
+    :param dataFrameColumnName:  your dataFrame column name
+    :return:
+    """
+    target = {}
+    for column_name in dataFrame[dataFrameColumnName]:
+        if column_name not in target:
+            target[column_name] = 1
+        if column_name in target:
+            target[column_name] = target[column_name] + 1
+    return target
 
 def change_alpha2_to_alpha3_for_df(starbucks):
     """原始数据中国家编码为alpha2不能用于画图，需要改为alpha3"""
@@ -128,22 +150,8 @@ def change_alpha2_to_alpha3_for_df(starbucks):
     country_code3_df = {}
     for c in list(pycountry.countries):
         alpha_2_to_3[c.alpha_2] = c.alpha_3
-    for country_name in starbucks['Country']:
-        country_code3_for_df.append(alpha_2_to_3[country_name])
-    country_code3_df["Country Code"] = country_code3_for_df
-    code_df = pd.DataFrame(country_code3_df)
-    starbucks.insert(8,"Country Code",code_df)
-    return starbucks
 
-def timezone_statistics(starbucks):
-    """统计每个时区中的店铺数量，返回timezone字典，字典键-值：时区名称-店铺数量"""
-    timezone = {}
-    for timezone_name in starbucks["Timezone"]:
-        if timezone_name not in timezone:
-            timezone[timezone_name] = 1
-        if timezone_name in timezone:
-            timezone[timezone_name] = timezone[timezone_name] + 1
-    return timezone
+    return dataFrame_Construct(starbucks,'Country',"Country Code",country_code3_for_df,country_code3_df,alpha_2_to_3,8)
 
 def min_in_dict(dict_name):
     """前提条件：字典的键为数值。取键值最小的数据返回"""
@@ -187,15 +195,18 @@ def set_timezone_color(starbucks,timezone):
                     continue
     tz_color_for_df = []
     tz_color_df = {}
-    for timezone in starbucks["Timezone"]:
-        tz_color_for_df.append(tz_rgb[timezone])
-    tz_color_df["Rgb Value"] = tz_color_for_df
-    color_df = pd.DataFrame(tz_color_df)
-    starbucks.insert(len(starbucks.columns), "Rgb Value", color_df)
-    return starbucks
+
+    return dataFrame_Construct(starbucks,"Timezone","Rgb Value",tz_color_for_df,tz_color_df,tz_rgb,len(starbucks.columns))
 
 def distance(lat1,lng1,lat2,lng2):
-    """已知两点经纬度，计算距离"""
+    """
+    caculate the distance accoring to two points' position
+    :param lat1:
+    :param lng1:
+    :param lat2:
+    :param lng2:
+    :return:
+    """
     radlat1 = math.radians(lat1)
     radlat2 = math.radians(lat2)
     a = radlat1 - radlat2
@@ -209,7 +220,16 @@ def distance(lat1,lng1,lat2,lng2):
         return s
 
 def top_k(aimlat,aimlng,starbucks,k=1,isShowInfo=True,isReturnTime=False):
-    """实现需求的Top—k函数"""
+    """
+    return the top-k points accoring to the position u enter
+    :param aimlat: the latitude u enter
+    :param aimlng: the longitude u enter
+    :param starbucks: starbucks is a dataframe
+    :param k: the number of points u want to search
+    :param isShowInfo: whether or not show info and draw map
+    :param isReturnTime:  whether or not return time
+    :return:
+    """
     startime = time.time()
     latlist = list(starbucks["Latitude"])
     lnglist = list(starbucks["Longitude"])
@@ -219,24 +239,26 @@ def top_k(aimlat,aimlng,starbucks,k=1,isShowInfo=True,isReturnTime=False):
     for lat,lng in lat_lng:
         if lat == '' or lng == '':
             lat_lng.remove((lat,lng))
+
     k_list = []
+    Minlat = None
+    Minlng = None
     while k > 0:
         MinDistance = -1
         for lat,lng in lat_lng:
             lat = float(lat)
             lng = float(lng)
+            #caculate the distance between points in dataframe and your aim point
             two_distance = distance(lat,lng,aimlat,aimlng)
-            if MinDistance == -1:
+            if MinDistance == -1 or (two_distance < MinDistance):
                 MinDistance = two_distance
                 Minlat = lat
                 Minlng = lng
-            if two_distance < MinDistance:
-                MinDistance = two_distance
-                Minlat = lat
-                Minlng = lng
+
         k_list.append((Minlat,Minlng))
         lat_lng.remove((str(Minlat),str(Minlng)))
         k -= 1
+
     if isShowInfo:
         # 新建一个小的dataframe,只包含符合条件的Starbuck的数据
         df = pd.DataFrame(columns=("City", "Store Name", "Latitude", "Longitude"))
@@ -248,11 +270,13 @@ def top_k(aimlat,aimlng,starbucks,k=1,isShowInfo=True,isReturnTime=False):
             df.loc[i] = [str(starbucks.iloc[index[0],1]),str(starbucks.iloc[index[0],9]),
                          str(starbucks.iloc[index[0],3]),str(starbucks.iloc[index[0],4])]
             i += 1
-        # print(df.head())
-        dc.draw_map(df,isOpen=False,size=15,newtitle="2.1 k points around the location",export=False)
+        #drawmap
+        dc.draw_map(df,isOpen=False,size=12,newtitle="2.1 k points around the location",export=False,enter_la=aimlat,enter_lon=aimlng)
     endtime = time.time()
+    #caculate consume time
     t = endtime - startime
     print("K="+k_key+"的查询时延：%.3f%s" % (t, 's'))
+
     if isReturnTime:
         t = round(t, 3)
         return t

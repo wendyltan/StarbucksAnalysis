@@ -9,8 +9,12 @@ functions in this script deal with map or chart drawing
 """
 import plotly.graph_objs as go
 import plotly.offline as off
+import plotly.plotly as py
 from src.util import helper as hp
 
+#set up username and api_key and mapbox access token if you want to use mapbox!
+py.plotly.tools.set_credentials_file(username="wendyltanpcy", api_key="Uka0AT8x27B5sQpdbSTs")
+mapbox_access_token = "pk.eyJ1Ijoid2VuZHlsdGFucGN5IiwiYSI6ImNqZ2dvc3ZkNjAwMW0ycW1ldXg2c3RkdW0ifQ.9W6uXdtELkw6ECHl6my-qg"
 
 def gen_Bar(datalist1,datalist2,title,export=False,isOpen=False):
     """
@@ -89,19 +93,13 @@ def gen_Pie(datalist1,datalist2,title,export=False,isOpen=False):
 
 
 
-def draw_map(starbucks,continent='world',export=False,isTimeZone=False,isOpen=False,size=3,newtitle="Starbucks in the World"):
-    """
-    传入DataFrame的starbucks和洲名，在地图上标出所有点
-    :param starbucks:星巴克的所有列数据
-    :param continent:可选值[ "world" | "usa" | "europe" | "asia" | "africa" | "north america" | "south america"]
-    :return:形成html文件，自动在浏览器打开
-    尽量重用和抽象代码避免累赘
-    """
+def draw_map(starbucks,continent='world',export=False,isTimeZone=False,isOpen=False,size=3,newtitle="Starbucks in the World",
+             enter_la=22.25,enter_lon= 113.53,mode='mapbox'):
 
     #是否根据时区筛选
     if not isTimeZone:
         starbucks['text'] = starbucks['City'] + ',' + starbucks["Store Name"]
-        use_color = 'rgb(141, 211, 199)'
+        use_color = 'rgb(255, 0, 0)'
     else:
         starbucks['text'] = starbucks["Store Name"] + ',' + starbucks["Timezone"]
         use_color = starbucks["Rgb Value"]
@@ -110,37 +108,71 @@ def draw_map(starbucks,continent='world',export=False,isTimeZone=False,isOpen=Fa
     if hp.check_map_range_valid(continent):
         print("Please enter valid range name!")
     else:
-        data = [dict(
-            type='scattergeo',
-            #locationmode='USA-states',貌似没有用，不像文档所述
-            lon=starbucks['Longitude'],
-            lat=starbucks['Latitude'],
-            text=starbucks['text'],
-            mode='markers',
-            marker=dict(
-                size=size,
-                opacity=0.8,
-                reversescale=True,
-                autocolorscale=False,
-                symbol='circular',
-                color=use_color
-            ))]
+        fig = None
+        if(mode=="mapbox"):
+            #draw mapbox
+            data = go.Data([
+                go.Scattermapbox(
+                    lat=starbucks['Latitude'],
+                    lon=starbucks['Longitude'],
+                    mode='markers',
+                    marker=go.Marker(
+                        size=size,
+                        color=use_color,
+                        opacity=0.7
+                    ),
+                    text=starbucks['text'],
+                )
+            ])
 
-        layout = dict(
-                title=newtitle + '<br>',
-                geo=dict(
-                    scope=continent,
-                    showcountries=True,
-                    countrycolor="rgb(0,0,0)",
-                    showland=True,
-                    landcolor="rgb(250, 250, 250)",
-                    subunitcolor="rgb(217, 217, 217)",
-                    countrywidth=0.5,
-                    subunitwidth=0.5
+            layout = go.Layout(
+                autosize=True,
+                hovermode='closest',
+                mapbox=dict(
+                    accesstoken=mapbox_access_token,
+                    bearing=0,
+                    center=dict(
+                        lat=enter_la,
+                        lon=enter_lon
+                    ),
+                    pitch=0,
+                    zoom=5
                 ),
             )
+            fig = dict(data=data, layout=layout)
+        elif(mode=="normal"):
+            #draw normal map
+            data = [dict(
+                type='scattergeo',
+                #locationmode='USA-states',貌似没有用，不像文档所述
+                lon=starbucks['Longitude'],
+                lat=starbucks['Latitude'],
+                text=starbucks['text'],
+                mode='markers',
+                marker=dict(
+                    size=size,
+                    opacity=0.8,
+                    reversescale=True,
+                    autocolorscale=False,
+                    symbol='circular',
+                    color=use_color
+                ))]
 
-        fig = dict(data=data,layout=layout)
+            layout = dict(
+                    title=newtitle + '<br>',
+                    geo=dict(
+                        scope=continent,
+                        showcountries=True,
+                        countrycolor="rgb(0,0,0)",
+                        showland=True,
+                        landcolor="rgb(250, 250, 250)",
+                        subunitcolor="rgb(217, 217, 217)",
+                        countrywidth=0.5,
+                        subunitwidth=0.5
+                    ),
+                )
+
+            fig = dict(data=data,layout=layout)
         if export:
             off.plot(fig, image='jpeg',image_width=1920,image_height=1080,
                      image_filename=continent.title(),auto_open=isOpen)
@@ -181,7 +213,6 @@ def draw_map_by_country(starbucks,title="Default",isOpen=False):
             )
         )
     )
-
     fig = dict(data=data, layout=layout)
     off.plot(fig, filename='chartHtml/'+title+'.html',auto_open=isOpen)
 

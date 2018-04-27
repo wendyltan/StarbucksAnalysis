@@ -138,6 +138,7 @@ def get_position(table,range='world',country_code=None):
 def get_dataFrame(table):
     """
     combine all data in database into dataframe format
+    'basically this function fuck up everything!'
     :param table:
     :return:
     """
