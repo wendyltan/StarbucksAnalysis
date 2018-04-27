@@ -45,6 +45,11 @@ class TestHelper(unittest.TestCase):
 
     def test_top_k(self):
         self.assertFalse(103.84,36.05,top_k(101.76,36.63))
+        
+    def test_count_starbucks_quantity_for_df(self):
+        country="CN"
+        count=hp.count_stabucks_quantity_for_df()
+        self.assertEqual(2735,count)
 
 
     def tearDown(self):
