@@ -27,6 +27,24 @@ class TestHelper(unittest.TestCase):
     def test_check_map_range_valid(self):
         continent = 'asia'
         self.assertFalse(hp.check_map_range_valid(continent))
+        
+    def test_distance(self,lat1,lng1,lat2,lng2):
+        radlat1 = math.radians(lat1)
+        radlat2 = math.radians(lat2)
+        lat1=23.022
+        lng1=113.121
+        lat2=23.129
+        lng2= 113.264
+        distance=18.889
+        a = radlat1 - radlat2
+        b = math.radians(lng1) - math.radians(lng2)
+        s = 2*math.asin(math.sqrt(math.pow(math.sin(a/2),2)+math.cos(radlat1)*math.cos(radlat2)*math.pow(math.sin(b/2),2)))
+        earth_radius = 6378.137
+        s = s*earth_radius
+        self.assertEquals(s,distance);
+
+    def test_top_k(self):
+        self.assertFalse(103.84,36.05,top_k(101.76,36.63))
 
 
     def tearDown(self):
