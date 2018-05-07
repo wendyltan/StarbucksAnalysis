@@ -16,6 +16,7 @@ from src.util import helper as hp
 py.plotly.tools.set_credentials_file(username="wendyltanpcy", api_key="Uka0AT8x27B5sQpdbSTs")
 mapbox_access_token = "pk.eyJ1Ijoid2VuZHlsdGFucGN5IiwiYSI6ImNqZ2dvc3ZkNjAwMW0ycW1ldXg2c3RkdW0ifQ.9W6uXdtELkw6ECHl6my-qg"
 
+
 def gen_Bar(datalist1,datalist2,title,export=False,isOpen=False):
     """
     绘制条形图
@@ -40,6 +41,7 @@ def gen_Bar(datalist1,datalist2,title,export=False,isOpen=False):
     else:
         off.plot(fig, filename='chartHtml/'+title+'.html',auto_open=isOpen)
 
+
 def gen_Scatter(datalist1,datalist2,title,export=False,isOpen=False):
     """
     绘制散点图
@@ -53,6 +55,7 @@ def gen_Scatter(datalist1,datalist2,title,export=False,isOpen=False):
         x=datalist2,
         y=datalist1,
         mode='markers',
+        # mode='lines+markers',
     )]
 
     fig = go.Figure(data=trace)
@@ -60,6 +63,7 @@ def gen_Scatter(datalist1,datalist2,title,export=False,isOpen=False):
         off.plot(fig,image='jpeg',image_filename=title)
     else:
         off.plot(fig, filename='chartHtml/'+title+'.html',auto_open=isOpen)
+
 
 def gen_Pie(datalist1,datalist2,title,export=False,isOpen=False):
     """
@@ -90,6 +94,16 @@ def gen_Pie(datalist1,datalist2,title,export=False,isOpen=False):
     else:
         off.plot(fig, filename='chartHtml/'+title+'.html',auto_open=isOpen)
 
+def draw_line_plot(datalist_x,datalist_y,title,export=False,isOpen=False):
+    trace = go.Scatter(
+        x=datalist_x,
+        y=datalist_y
+    )
+    data = [trace]
+    if export:
+        off.plot(data,image='jpeg',image_filename=title,auto_open=isOpen)
+    else:
+        off.plot(data, filename='chartHtml/'+title+'.html',auto_open=isOpen)
 
 
 def draw_map(starbucks,continent='world',export=False,isTimeZone=False,isOpen=False,scl=0,size=3,

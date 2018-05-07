@@ -199,14 +199,7 @@ def set_timezone_color(starbucks,timezone):
     return dataFrame_Construct(starbucks,"Timezone","Rgb Value",tz_color_for_df,tz_color_df,tz_rgb,len(starbucks.columns))
 
 def distance(lat1,lng1,lat2,lng2):
-    """
-    caculate the distance accoring to two points' position
-    :param lat1:
-    :param lng1:
-    :param lat2:
-    :param lng2:
-    :return:
-    """
+    """计算两点间距离"""
     radlat1 = math.radians(lat1)
     radlat2 = math.radians(lat2)
     a = radlat1 - radlat2
@@ -219,7 +212,28 @@ def distance(lat1,lng1,lat2,lng2):
     else:
         return s
 
-def top_k(aimlat,aimlng,starbucks,k=1,isShowInfo=True,isReturnTime=False):
+def count_all_distance(aimlat,aimlng,starbucks):
+    """计算所有点到目标点的距离，保存为字典返回"""
+    d_dict = {}
+    latlist = list(starbucks["Latitude"])
+    lnglist = list(starbucks["Longitude"])
+    lat_lng = list(zip(latlist, lnglist))
+    # 去除经纬度为空的数据
+    for lat, lng in lat_lng:
+        if lat == '' or lng == '':
+            lat_lng.remove((lat, lng))
+    # 开始计算所有数据，并保存在字典中，字典键-值：“（纬度，经度）”-距离
+    for lat, lng in lat_lng:
+        lat = float(lat)
+        lng = float(lng)
+        local = (lat,lng)
+        two_distance = distance(lat,lng, aimlat, aimlng)
+        d_dict[local] = two_distance
+    return d_dict
+
+
+
+def top_k(aimlat,aimlng,starbucks,d_dict,k=1,isShowInfo=False,isOpenHtml=False,isReturnTime=False):
     """
     return the top-k points accoring to the position u enter
     :param aimlat: the latitude u enter
@@ -231,36 +245,17 @@ def top_k(aimlat,aimlng,starbucks,k=1,isShowInfo=True,isReturnTime=False):
     :return:
     """
     startime = time.time()
-    latlist = list(starbucks["Latitude"])
-    lnglist = list(starbucks["Longitude"])
-    lat_lng = list(zip(latlist, lnglist))
-    k_key = str(k)
-    # 去除经纬度为空的数据
-    for lat,lng in lat_lng:
-        if lat == '' or lng == '':
-            lat_lng.remove((lat,lng))
-
     k_list = []
-    Minlat = None
-    Minlng = None
-    while k > 0:
-        MinDistance = -1
-        for lat,lng in lat_lng:
-            lat = float(lat)
-            lng = float(lng)
-            #caculate the distance between points in dataframe and your aim point
-            two_distance = distance(lat,lng,aimlat,aimlng)
-            if MinDistance == -1 or (two_distance < MinDistance):
-                MinDistance = two_distance
-                Minlat = lat
-                Minlng = lng
-
-        k_list.append((Minlat,Minlng))
-        lat_lng.remove((str(Minlat),str(Minlng)))
+    k_key = str(k)
+    for local,d in sorted(d_dict.items(),key=lambda x : x[1]):
+        k_list.append(local)
         k -= 1
-
+        if k == 0 :
+            break
+    # endtime放这里原因：地图上标点打开地图会让时间加上近十秒，实际上这不属于查询时延的时间，到这查询已经结束了
+    endtime = time.time()
     if isShowInfo:
-        # 新建一个小的dataframe,只包含符合条件的Starbuck的数据
+        # 新建一个小的dataframe,只包含符合条件的Starbucks的数据
         df = pd.DataFrame(columns=("City", "Store Name", "Latitude", "Longitude"))
         i = 0
         for x in k_list:
@@ -271,13 +266,17 @@ def top_k(aimlat,aimlng,starbucks,k=1,isShowInfo=True,isReturnTime=False):
                          str(starbucks.iloc[index[0],3]),str(starbucks.iloc[index[0],4])]
             i += 1
         #drawmap
-        dc.draw_map(df,isOpen=False,size=12,newtitle="2.1 k points around the location",export=False,enter_la=aimlat,enter_lon=aimlng)
-    endtime = time.time()
-    #caculate consume time
+        dc.draw_map(df,isOpen=isOpenHtml,size=12,newtitle="2.1 k points around the location",export=False,enter_la=aimlat,enter_lon=aimlng)
+
     t = endtime - startime
     print("K="+k_key+"的查询时延：%.3f%s" % (t, 's'))
+    print("k="+str(k_key)+"时延：" + str(t))
 
     if isReturnTime:
         t = round(t, 3)
         return t
+
+
+
+
 
