@@ -23,15 +23,17 @@ if __name__ == '__main__':
     # window.show()
     # app.exec_()
 
-    # 需求4.1改进，对于同一个k值，查询时延几乎不变。
+    # 测试数据
     starbucks = qr.get_dataFrame(table)
-    aimlat = 22.3
-    aimlng = 113.7
-    c = 1
+    aimlat = 22.27
+    aimlng = 114
+    c = 100
     st = time.time()
     d_dict = hp.count_all_distance(aimlat,aimlng,starbucks)
-    # 以下为查询k个点的需求。
-    # hp.top_k(aimlat,aimlng,starbucks,d_dict,k=c,isShowInfo=True,isOpenHtml=False)
+
+    # 第4次迭代，需求1改进，对于同一个k值，查询时延几乎不变。以下为查询k个点的需求。
+    # k_list = hp.top_k(d_dict,k=c,isReturnList=True,isReturnTime=False)
+    # hp.show_info_in_map(aimlat,aimlng,starbucks,k_list,t='4.1',isOpenHtml=True)
 
     # 需求4.1改进，以下为随着k增长，查询时延的折线图。
     # x_k = []
@@ -54,3 +56,8 @@ if __name__ == '__main__':
     #     print("总运行时间为：%.3f%s" %(runtime,'s'))
     # dc.draw_line_plot(x_k, y_time, "随着K值得增长查询时延的变化", isOpen=True)
     # dc.gen_Scatter(y_time,x_k,"随着K值得增长查询时延的变化",isOpen=True)
+
+    # 第4次迭代，需求2，距离range查询
+    # c = 50
+    # r_list = hp.top_r(d_dict,r=c, isReturnList=True,isReturnTime=False)
+    # hp.show_info_in_map(aimlat,aimlng,starbucks,r_list,t='4.2',isOpenHtml=False)

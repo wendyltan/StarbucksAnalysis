@@ -65,7 +65,7 @@ class Gen():
                [0.3, "rgb(61,62,255)"],[0.6, "rgb(71,31,255)"],[1, "rgb(81,0,255)"]]
         dc.draw_map(starbucks,isTimeZone=True,isOpen=False,scl=scl,export=False,newtitle="1.1 timezone")
 
-        # 第3次迭代，需求2.1
+        # 第3次迭代，需求2.1。（用改进后的，后面再改改）
         if(a ==0 and b == 0):
             aimlat =1
             aimlng =1
@@ -75,7 +75,7 @@ class Gen():
         k = c + 1
         hp.top_k(aimlat, aimlng, starbucks, k,isShowInfo=True)
 
-        # 第3次迭代，需求2.2
+        # 第3次迭代，需求2.2。（用改进后的，后面再改改）
         starbucks = qr.get_dataFrame(table)
         while True:
             if aimlat >= -90 and aimlat <= 90 and aimlng >= -180 and aimlng <= 180:

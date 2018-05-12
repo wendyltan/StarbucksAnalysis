@@ -199,7 +199,7 @@ def set_timezone_color(starbucks,timezone):
     return dataFrame_Construct(starbucks,"Timezone","Rgb Value",tz_color_for_df,tz_color_df,tz_rgb,len(starbucks.columns))
 
 def distance(lat1,lng1,lat2,lng2):
-    """计算两点间距离"""
+    """计算两点间距离,单位为km"""
     radlat1 = math.radians(lat1)
     radlat2 = math.radians(lat2)
     a = radlat1 - radlat2
@@ -231,9 +231,31 @@ def count_all_distance(aimlat,aimlng,starbucks):
         d_dict[local] = two_distance
     return d_dict
 
+def show_info_in_map(aimlat,aimlng,starbucks,local_list,t,isOpenHtml=False):
+    """在地图上出查到到的点"""
+    # 新建一个小的dataframe,只包含符合条件的Starbucks的数据
+    df = pd.DataFrame(columns=("City", "Store Name", "Latitude", "Longitude"))
+    i = 0
+    for x in local_list:
+        print(i+1,x)
+        lat = str(x[0])
+        lng = str(x[1])
+        # 对于原先为整型的数据，要还原成int，才能在starbucks中找到index。
+        if x[0] % 1 == 0.0:
+            lat = str(int(x[0]))
+        if x[1] % 1 == 0.0:
+            lng = str(int(x[1]))
+        index = starbucks[(starbucks.Latitude == lat) & (starbucks.Longitude == lng)].index.tolist()
+        # 给df插入数据
+        df.loc[i] = [str(starbucks.iloc[index[0], 1]), str(starbucks.iloc[index[0], 9]),
+                     str(starbucks.iloc[index[0], 3]), str(starbucks.iloc[index[0], 4])]
+        i += 1
+    # drawmap
+    dc.draw_map(df, isOpen=isOpenHtml, size=12, newtitle=t, export=False,
+                enter_la=aimlat, enter_lon=aimlng)
 
 
-def top_k(aimlat,aimlng,starbucks,d_dict,k=1,isShowInfo=False,isOpenHtml=False,isReturnTime=False):
+def top_k(d_dict,k=1,isReturnList=False,isReturnTime=False):
     """
     return the top-k points accoring to the position u enter
     :param aimlat: the latitude u enter
@@ -254,28 +276,37 @@ def top_k(aimlat,aimlng,starbucks,d_dict,k=1,isShowInfo=False,isOpenHtml=False,i
             break
     # endtime放这里原因：地图上标点打开地图会让时间加上近十秒，实际上这不属于查询时延的时间，到这查询已经结束了
     endtime = time.time()
-    if isShowInfo:
-        # 新建一个小的dataframe,只包含符合条件的Starbucks的数据
-        df = pd.DataFrame(columns=("City", "Store Name", "Latitude", "Longitude"))
-        i = 0
-        for x in k_list:
-            print(x)
-            index = starbucks[(starbucks.Latitude == str(x[0])) & (starbucks.Longitude == str(x[1]))].index.tolist()
-            # 给df插入数据
-            df.loc[i] = [str(starbucks.iloc[index[0],1]),str(starbucks.iloc[index[0],9]),
-                         str(starbucks.iloc[index[0],3]),str(starbucks.iloc[index[0],4])]
-            i += 1
-        #drawmap
-        dc.draw_map(df,isOpen=isOpenHtml,size=12,newtitle="2.1 k points around the location",export=False,enter_la=aimlat,enter_lon=aimlng)
+    runtime = endtime - startime
+    print("K="+k_key+"的查询时延：%.3f%s" % (runtime, 's'))
+    # print("k="+str(k_key)+"时延：" + str(t))
+    runtime = round(runtime,3)
+    if isReturnList and isReturnTime:
+        return k_list,runtime
+    else:
+        if isReturnList:
+            return k_list
+        if isReturnTime:
+            return runtime
 
-    t = endtime - startime
-    print("K="+k_key+"的查询时延：%.3f%s" % (t, 's'))
-    print("k="+str(k_key)+"时延：" + str(t))
 
-    if isReturnTime:
-        t = round(t, 3)
-        return t
-
+def top_r(d_dict,r,isReturnList=False,isReturnTime=False):
+    startime = time.time()
+    r_key = str(r)
+    r_list = []
+    for local,d in d_dict.items():
+        if d < r:
+            r_list.append(local)
+    endtime = time.time()
+    runtime = endtime-startime
+    print("R="+r_key+"的查询时延：%.3f%s" %(runtime,'s'))
+    runtime = round(runtime,3)
+    if isReturnList and isReturnTime:
+        return r_list,runtime
+    else:
+        if isReturnList:
+            return r_list
+        if isReturnTime:
+            return runtime
 
 
 
