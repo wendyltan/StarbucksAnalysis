@@ -308,6 +308,41 @@ def top_r(d_dict,r,isReturnList=False,isReturnTime=False):
         if isReturnTime:
             return runtime
 
+def show_query_delay(d_dict,k,KorR,st=-1,isOpenHtml=False):
+    x_k = []
+    y_time = []
+    if KorR.upper() == "K":
+        if k <= 500:
+            for x in range(1, k + 1):
+                t = top_k(d_dict, x, isReturnTime=True)
+                x_k.append(x)
+                y_time.append(t)
+        else:
+            for x in range(1, k + 1, 35):
+                t = top_k(d_dict, x, isReturnTime=True)
+                x_k.append(x)
+                y_time.append(t)
+    if KorR.upper() == "R":
+        if k <= 500:
+            for x in range(1, k + 1):
+                t = top_r(d_dict, x, isReturnTime=True)
+                x_k.append(x)
+                y_time.append(t)
+        else:
+            for x in range(1, k + 1, 15):
+                t = top_r(d_dict, x, isReturnTime=True)
+                x_k.append(x)
+                y_time.append(t)
+    if st != -1:
+        et = time.time()
+        runtime = et-st
+        print("总运行时间为：%.3f%s" % (runtime, 's'))
+    title = "随着" + KorR.upper() + "值得增长查询时延的变化"
+    # 折线图
+    dc.draw_line_plot(x_k, y_time, title , isOpen=isOpenHtml)
+    # 散点图
+    # dc.gen_Scatter(y_time,x_k,"随着K值得增长查询时延的变化",isOpen=isOpenHtml)
+
 
 
 

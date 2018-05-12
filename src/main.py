@@ -27,7 +27,7 @@ if __name__ == '__main__':
     starbucks = qr.get_dataFrame(table)
     aimlat = 22.27
     aimlng = 114
-    c = 100
+    c = 480
     st = time.time()
     d_dict = hp.count_all_distance(aimlat,aimlng,starbucks)
 
@@ -35,29 +35,13 @@ if __name__ == '__main__':
     # k_list = hp.top_k(d_dict,k=c,isReturnList=True,isReturnTime=False)
     # hp.show_info_in_map(aimlat,aimlng,starbucks,k_list,t='4.1',isOpenHtml=True)
 
-    # 需求4.1改进，以下为随着k增长，查询时延的折线图。
-    # x_k = []
-    # y_time = []
-    # if  c <= 500:
-    #     for k in range(1, c + 1):
-    #         t = hp.top_k(aimlat, aimlng, starbucks, d_dict, k, isShowInfo=False, isReturnTime=True)
-    #         x_k.append(k)
-    #         y_time.append(t)
-    #     et = time.time()
-    #     runtime = et - st
-    #     print("总运行时间为：%.3f%s" %(runtime,'s'))
-    # else:
-    #     for k in range(1,c+1,35):
-    #         t = hp.top_k(aimlat, aimlng, starbucks, d_dict, k, isShowInfo=False, isReturnTime=True)
-    #         x_k.append(k)
-    #         y_time.append(t)
-    #     et = time.time()
-    #     runtime = et - st
-    #     print("总运行时间为：%.3f%s" %(runtime,'s'))
-    # dc.draw_line_plot(x_k, y_time, "随着K值得增长查询时延的变化", isOpen=True)
-    # dc.gen_Scatter(y_time,x_k,"随着K值得增长查询时延的变化",isOpen=True)
+    # 第4次迭代，需求1改进，以下为随着k增长，查询时延的折线图。
+    # hp.show_query_delay(d_dict,c,"K",st,isOpenHtml=True)
 
-    # 第4次迭代，需求2，距离range查询
+    # 第4次迭代，需求2.1，距离range查询
     # c = 50
     # r_list = hp.top_r(d_dict,r=c, isReturnList=True,isReturnTime=False)
     # hp.show_info_in_map(aimlat,aimlng,starbucks,r_list,t='4.2',isOpenHtml=False)
+
+    # 第4次迭代，需求2.2，展示range查询时延的变化
+    # hp.show_query_delay(d_dict,c,"R",st,isOpenHtml=True)
