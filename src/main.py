@@ -45,3 +45,31 @@ if __name__ == '__main__':
 
     # 第4次迭代，需求2.2，展示range查询时延的变化
     # hp.show_query_delay(d_dict,c,"R",st,isOpenHtml=True)
+
+    # 第4次迭代，需求3.1，k个完全匹配的店铺
+    # keyword = "珠海"
+    # k = 5
+    # new_columns = starbucks.columns.tolist()
+    # match_df = pd.DataFrame(columns=new_columns)
+    # i = 0
+    # for index,starbuck in starbucks.iterrows():
+    #     if  keyword in starbuck["Store Name"]:
+    #         match_df.loc[i] = starbuck
+    #         i += 1
+    # if i < k:
+    #     print("满足完全匹配的最多有"+str(i)+"个。")
+    # all_d_dict = hp.count_all_distance(aimlat,aimlng,match_df)
+    # match_list = hp.top_k(all_d_dict,k,isReturnList=True)
+    # hp.show_info_in_map(aimlat,aimlng,starbucks,match_list,t="3.1",isOpenHtml=True)
+
+
+
+
+
+
+
+
+
+
+
+

@@ -222,7 +222,7 @@ def count_all_distance(aimlat,aimlng,starbucks):
     for lat, lng in lat_lng:
         if lat == '' or lng == '':
             lat_lng.remove((lat, lng))
-    # 开始计算所有数据，并保存在字典中，字典键-值：“（纬度，经度）”-距离
+    # 开始计算所有数据，并保存在字典中，字典键-值：“（纬度，经度）”-距离,其实应该是“Index-(纬度，经度，距离)”好一点
     for lat, lng in lat_lng:
         lat = float(lat)
         lng = float(lng)
@@ -237,7 +237,7 @@ def show_info_in_map(aimlat,aimlng,starbucks,local_list,t,isOpenHtml=False):
     df = pd.DataFrame(columns=("City", "Store Name", "Latitude", "Longitude"))
     i = 0
     for x in local_list:
-        print(i+1,x)
+        print(x)
         lat = str(x[0])
         lng = str(x[1])
         # 对于原先为整型的数据，要还原成int，才能在starbucks中找到index。
