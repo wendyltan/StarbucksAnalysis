@@ -9,6 +9,7 @@ from src import query as qr
 from src import drawChart as dc
 from src.util import helper as hp
 from src import *
+import time
 
 class Gen():
     """
@@ -73,7 +74,9 @@ class Gen():
             aimlng = a
             aimlat = b
         k = c + 1
-        hp.top_k(aimlat, aimlng, starbucks, k,isShowInfo=True)
+        d_dict = hp.count_all_distance(aimlat,aimlng,starbucks)
+        hp.top_k(d_dict, k)
+        # hp.top_k(aimlat, aimlng, starbucks, k,isShowInfo=True)
 
         # 第3次迭代，需求2.2。（用改进后的，后面再改改）
         starbucks = qr.get_dataFrame(table)
@@ -83,12 +86,15 @@ class Gen():
             else:
                 print("输入数据不合法！")
                 break
-        x_k = []
-        y_time = []
-        for k in range(1,c+1):
-            t = hp.top_k(aimlat,aimlng,starbucks,k,isShowInfo=False,isReturnTime=True)
-            x_k.append(k)
-            y_time.append(t)
-        dc.gen_Bar(x_k,y_time,"随着K值得增长查询时延的变化",isOpen=False)
+        st = time.time()
+        d_dict = hp.count_all_distance(aimlat,aimlng,starbucks)
+        hp.show_query_delay(d_dict,c,"K",st,isOpenHtml=False)
+        # x_k = []
+        # y_time = []
+        # for k in range(1,c+1):
+        #     t = hp.top_k(aimlat,aimlng,starbucks,k,isShowInfo=False,isReturnTime=True)
+        #     x_k.append(k)
+        #     y_time.append(t)
+        # dc.gen_Bar(x_k,y_time,"随着K值得增长查询时延的变化",isOpen=False)
         print("All chartHtml generate success!")
         return True

@@ -20,10 +20,10 @@ from fuzzywuzzy import fuzz
 if __name__ == '__main__':
 
     # 程序主循环
-    # app = br.QApplication(sys.argv)
-    # window = br.MainWindow()
-    # window.show()
-    # app.exec_()
+    app = br.QApplication(sys.argv)
+    window = br.MainWindow()
+    window.show()
+    app.exec_()
 
     # 直接运行可以看到这次迭代的所有结果
     # 由于不是很清楚界面那边，需要用户输入的数据都写在下面的注释里了，还有啥问题随时沟通
