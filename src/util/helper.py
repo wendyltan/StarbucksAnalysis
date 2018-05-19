@@ -14,6 +14,7 @@ import random
 import math
 import time
 import pycountry
+from fuzzywuzzy import fuzz
 import pandas as pd
 from collections import Counter
 from src import drawChart as dc
@@ -343,6 +344,67 @@ def show_query_delay(d_dict,k,KorR,st=-1,isOpenHtml=False):
     # 散点图
     # dc.gen_Scatter(y_time,x_k,"随着K值得增长查询时延的变化",isOpen=isOpenHtml)
 
-
+def keyword_select(keyword,k,aimlat,aimlng,starbucks,isOpen=False):
+    """包括完全匹配和部分匹配"""
+    new_columns = starbucks.columns.tolist()
+    match_df = pd.DataFrame(columns=new_columns)
+    i = 0
+    # 第4次迭代，需求3.2，i>0完全匹配
+    for index, starbuck in starbucks.iterrows():
+        if keyword in starbuck["Store Name"]:
+            match_df.loc[i] = starbuck
+            i += 1
+    if i > 0:
+        if  i < k:
+            print("关键词为"+keyword+"完全匹配的最多有"+str(i)+"个。")
+        all_d_dict = count_all_distance(aimlat,aimlng,match_df)
+        match_list = top_k(all_d_dict,k,isReturnList=True)
+        show_info_in_map(aimlat,aimlng,starbucks,match_list,t="4.3.1",isOpenHtml=isOpen)
+    # 第4次迭代，需求3.2，i=0进行相似度查询
+    if i == 0:
+        select_dict_temp = {}
+        select_dict = {}
+        # 计算keyword和所有店铺名的相似度
+        for index, starbuck in starbucks.iterrows():
+            ratio = fuzz.token_sort_ratio(keyword, starbuck["Store Name"])
+            if ratio == 0:
+                continue
+            if starbuck["Latitude"] == '' or starbuck["Longitude"] == '':
+                continue
+            select_dict_temp[index] = [ratio]
+        temp = 0.0
+        for index, list in sorted(select_dict_temp.items(), key=lambda x: x[1][0], reverse=True):
+            if i == 0:
+                temp = float(list[0])
+                d = distance(aimlat, aimlng, float(starbucks.loc[index]["Latitude"]),
+                                       float(starbucks.loc[index]["Longitude"]))
+                select_dict[index] = (list[0], d)
+                i += 1
+            else:
+                d = distance(aimlat, aimlng, float(starbucks.loc[index]["Latitude"]),
+                                       float(starbucks.loc[index]["Longitude"]))
+                select_dict[index] = (list[0], d)
+                if float(list[0]) == float(temp):
+                    continue
+                else:
+                    temp = float(list[0])
+                    i += 1
+            if i >= k:
+                break
+        # 现在select_dict 的键-值为“index in starbucks - （相似度，距离）”
+        # i重新置为0，返回k个相似度查询结果
+        i = 0
+        for index, RD in sorted(select_dict.items(), key=lambda value: (value[1][0], value[1][1]), reverse=True):
+            # print(RD[0],RD[1],index)
+            match_df.loc[i] = starbucks.loc[index]
+            if i == 0:
+                print("关键词为"+keyword+"模糊匹配结果如下：")
+            print(match_df.loc[i]["Store Name"])
+            i += 1
+            if i >= k:
+                break
+        all_d_dict = count_all_distance(aimlat, aimlng, match_df)
+        match_list = top_k(all_d_dict, k, isReturnList=True)
+        show_info_in_map(aimlat, aimlng, starbucks, match_list, t="4.3.2", isOpenHtml=isOpen)
 
 
