@@ -107,7 +107,8 @@ class MainWindow(QMainWindow):
             k = int(q.split(',')[2])
             if (lat >= -180 and lat <= 180 and lon >= -90 and lon <= 90):
                 gen2.run(lat, lon, k, keyword=None, mode=self.mode)
-                self.addChartMenu()
+                if(self.first):
+                    self.addChartMenu()
                 self.first = False
             else:
                 self.urlbar.setText("不合法的输入！")
@@ -118,7 +119,8 @@ class MainWindow(QMainWindow):
             r = int(q.split(',')[2])
             if (lat >= -180 and lat <= 180 and lon >= -90 and lon <= 90):
                 gen2.run(lat, lon, r, keyword=None, mode=self.mode)
-                self.addChartMenu()
+                if (self.first):
+                    self.addChartMenu()
                 self.first = False
             else:
                 self.urlbar.setText("不合法的输入！")
@@ -130,7 +132,8 @@ class MainWindow(QMainWindow):
             k = int(q.split(',')[3])
             if (lat >= -180 and lat <= 180 and lon >= -90 and lon <= 90):
                 gen2.run(lat, lon, k,keyword,  mode=self.mode)
-                self.addChartMenu()
+                if (self.first):
+                    self.addChartMenu()
                 self.first = False
             else:
                 self.urlbar.setText("不合法的输入！")
