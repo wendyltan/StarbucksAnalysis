@@ -16,9 +16,10 @@ An analytical project for Starbucks dataset
 Run `main.py`
 
 ## 历史开发进度
-
+- 18/5/20:
+    + **jasonli**修改一些错误，增加弹窗显示查询信息
 - 18/5/19:
-    + **Wendy**基本完成迭代四的显示处理
+    + **Wendy**基本完成迭代四的显示处理
     + **huangyep**基本完成迭代四需求
 - 18/4/27:
     + **Wendy**将`helper`部分函数抽象，删掉不必要的注释以及py文件，消减程序赘余
