@@ -346,6 +346,9 @@ def show_query_delay(d_dict,k,KorR,st=-1,isOpenHtml=False):
 
 def keyword_select(keyword,k,aimlat,aimlng,starbucks,isOpen=False):
     """包括完全匹配和部分匹配"""
+    root = Tk()                     # 创建窗口对象
+    root.title("位置")
+    listb  = Listbox(root)
     new_columns = starbucks.columns.tolist()
     match_df = pd.DataFrame(columns=new_columns)
     i = 0
@@ -355,8 +358,14 @@ def keyword_select(keyword,k,aimlat,aimlng,starbucks,isOpen=False):
             match_df.loc[i] = starbuck
             i += 1
     if i > 0:
+        listb.insert(0,str(i)+"个。")
+        listb.insert(0,"完全匹配的最多有")
+        listb.insert(0,keyword)
+        listb.insert(0,"关键词为")
         if  i < k:
+
             print("关键词为"+keyword+"完全匹配的最多有"+str(i)+"个。")
+
         all_d_dict = count_all_distance(aimlat,aimlng,match_df)
         match_list = top_k(all_d_dict,k,isReturnList=True)
         show_info_in_map(aimlat,aimlng,starbucks,match_list,t="4.3.1",isOpenHtml=isOpen)
@@ -397,22 +406,21 @@ def keyword_select(keyword,k,aimlat,aimlng,starbucks,isOpen=False):
         for index, RD in sorted(select_dict.items(), key=lambda value: (value[1][0], value[1][1]), reverse=True):
             # print(RD[0],RD[1],index)
             match_df.loc[i] = starbucks.loc[index]
+            listb.insert(0,match_df.loc[i]["Store Name"])
             if i == 0:
                 print("关键词为"+keyword+"模糊匹配结果如下：")
+                # listb.insert(0,"关键词为"+keyword+"模糊匹配结果如下：\n")
             print(match_df.loc[i]["Store Name"])
+
             i += 1
             if i >= k:
                 break
 
-    root = Tk()                     # 创建窗口对象
-    root.title("位置")
-    listb  = Listbox(root)
+
     all_d_dict = count_all_distance(aimlat, aimlng, match_df)
     match_list = top_k(all_d_dict, k, isReturnList=True)
     show_info_in_map(aimlat, aimlng, starbucks, match_list, t="4.3.2",isOpenHtml=isOpen)
-    for item in match_list:                 # 插入数据
-        listb.insert(0,item)
-    listb.insert(0,"查询结果的经纬度")
+
     listb.pack()
     root.mainloop()
 
