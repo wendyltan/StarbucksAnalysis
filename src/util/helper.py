@@ -8,7 +8,7 @@
 """
 all help functions go into here
 """
-
+from tkinter import *
 import re
 import random
 import math
@@ -403,8 +403,16 @@ def keyword_select(keyword,k,aimlat,aimlng,starbucks,isOpen=False):
             i += 1
             if i >= k:
                 break
+
+    root = Tk()                     # 创建窗口对象
+    root.title("位置")
+    listb  = Listbox(root)
     all_d_dict = count_all_distance(aimlat, aimlng, match_df)
     match_list = top_k(all_d_dict, k, isReturnList=True)
     show_info_in_map(aimlat, aimlng, starbucks, match_list, t="4.3.2",isOpenHtml=isOpen)
-
+    for item in match_list:                 # 插入数据
+        listb.insert(0,item)
+    listb.insert(0,"查询结果的经纬度")
+    listb.pack()
+    root.mainloop()
 
