@@ -403,8 +403,8 @@ def keyword_select(keyword,k,aimlat,aimlng,starbucks,isOpen=False):
             i += 1
             if i >= k:
                 break
-        all_d_dict = count_all_distance(aimlat, aimlng, match_df)
-        match_list = top_k(all_d_dict, k, isReturnList=True)
-        show_info_in_map(aimlat, aimlng, starbucks, match_list, t="4.3.2", isOpenHtml=isOpen)
+    all_d_dict = count_all_distance(aimlat, aimlng, match_df)
+    match_list = top_k(all_d_dict, k, isReturnList=True)
+    show_info_in_map(aimlat, aimlng, starbucks, match_list, t="4.3.2",isOpenHtml=isOpen)
 
 

@@ -17,7 +17,7 @@ class Gen():
     """
     do not put this long smelly code in main. Use a class as a module import  instead
     """
-    def run(self, lat, lon, r_or_k,keyword=None,mode='k'):
+    def run(self, lon,lat, r_or_k,keyword=None,mode='k'):
         # # 第2次迭代，需求1按经纬度绘制散点图
         starbucks = qr.get_dataFrame(table)
         # # 画世界/亚洲等范围的地图

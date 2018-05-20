@@ -102,11 +102,11 @@ class MainWindow(QMainWindow):
         q = self.urlbar.text()
         gen2 = g.Gen()
         if (self.mode == 'k'):
-            lat = float(q.split(',')[0])
-            lon = float(q.split(',')[1])
+            lon = float(q.split(',')[0])
+            lat = float(q.split(',')[1])
             k = int(q.split(',')[2])
-            if (lat >= -180 and lat <= 180 and lon >= -90 and lon <= 90):
-                gen2.run(lat, lon, k, keyword=None, mode=self.mode)
+            if (lon >= -180 and lon <= 180 and lat >= -90 and lat <= 90):
+                gen2.run(lon, lat, k, keyword=None, mode=self.mode)
                 if(self.first):
                     self.addChartMenu()
                 self.first = False
@@ -114,11 +114,11 @@ class MainWindow(QMainWindow):
                 self.urlbar.setText("不合法的输入！")
         elif (self.mode == 'r'):
             print("Enter r mode!")
-            lat = float(q.split(',')[0])
-            lon = float(q.split(',')[1])
+            lon = float(q.split(',')[0])
+            lat = float(q.split(',')[1])
             r = int(q.split(',')[2])
-            if (lat >= -180 and lat <= 180 and lon >= -90 and lon <= 90):
-                gen2.run(lat, lon, r, keyword=None, mode=self.mode)
+            if (lon >= -180 and lon <= 180 and lat >= -90 and lat <= 90):
+                gen2.run(lon, lat, r, keyword=None, mode=self.mode)
                 if (self.first):
                     self.addChartMenu()
                 self.first = False
@@ -126,12 +126,12 @@ class MainWindow(QMainWindow):
                 self.urlbar.setText("不合法的输入！")
         elif (self.mode == 'm'):
             print("Enter m mode!")
-            lat = float(q.split(',')[0])
-            lon = float(q.split(',')[1])
+            lon = float(q.split(',')[0])
+            lat = float(q.split(',')[1])
             keyword = q.split(',')[2]
             k = int(q.split(',')[3])
-            if (lat >= -180 and lat <= 180 and lon >= -90 and lon <= 90):
-                gen2.run(lat, lon, k,keyword,  mode=self.mode)
+            if (lon >= -180 and lon <= 180 and lat >= -90 and lat <= 90):
+                gen2.run(lon, lat, k,keyword,  mode=self.mode)
                 if (self.first):
                     self.addChartMenu()
                 self.first = False
