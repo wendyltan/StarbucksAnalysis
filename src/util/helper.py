@@ -13,6 +13,8 @@ import re
 import random
 import math
 import time
+import os
+import json
 import pycountry
 from fuzzywuzzy import fuzz
 import pandas as pd
@@ -257,16 +259,6 @@ def show_info_in_map(aimlat,aimlng,starbucks,local_list,t,isOpenHtml=False):
 
 
 def top_k(d_dict,k=1,isReturnList=False,isReturnTime=False):
-    """
-    return the top-k points accoring to the position u enter
-    :param aimlat: the latitude u enter
-    :param aimlng: the longitude u enter
-    :param starbucks: starbucks is a dataframe
-    :param k: the number of points u want to search
-    :param isShowInfo: whether or not show info and draw map
-    :param isReturnTime:  whether or not return time
-    :return:
-    """
     startime = time.time()
     k_list = []
     k_key = str(k)
@@ -275,11 +267,9 @@ def top_k(d_dict,k=1,isReturnList=False,isReturnTime=False):
         k -= 1
         if k == 0 :
             break
-    # endtime放这里原因：地图上标点打开地图会让时间加上近十秒，实际上这不属于查询时延的时间，到这查询已经结束了
     endtime = time.time()
     runtime = endtime - startime
     print("K="+k_key+"的查询时延：%.3f%s" % (runtime, 's'))
-    # print("k="+str(k_key)+"时延：" + str(t))
     runtime = round(runtime,3)
     if isReturnList and isReturnTime:
         return k_list,runtime
@@ -344,28 +334,29 @@ def show_query_delay(d_dict,k,KorR,st=-1,isOpenHtml=False):
     # 散点图
     # dc.gen_Scatter(y_time,x_k,"随着K值得增长查询时延的变化",isOpen=isOpenHtml)
 
-def keyword_select(keyword,k,aimlat,aimlng,starbucks,isOpen=False):
+def keyword_select(keyword,k,aimlat,aimlng,starbucks,isReturnmatch=False,isOpen=False):
     """包括完全匹配和部分匹配"""
-    root = Tk()                     # 创建窗口对象
-    root.title("位置")
-    listb  = Listbox(root)
+    # root = Tk()                     # 创建窗口对象
+    # root.title("位置")
+    # listb  = Listbox(root)
     new_columns = starbucks.columns.tolist()
     match_df = pd.DataFrame(columns=new_columns)
+    match_dict = {}
     i = 0
     # 第4次迭代，需求3.2，i>0完全匹配
     for index, starbuck in starbucks.iterrows():
         if keyword in starbuck["Store Name"]:
             match_df.loc[i] = starbuck
+            match_dict[str(index)] = {}
+            match_dict[str(index)]["Store Name"] = starbuck["Store Name"]
             i += 1
     if i > 0:
-        listb.insert(0,str(i)+"个。")
-        listb.insert(0,"完全匹配的最多有")
-        listb.insert(0,keyword)
-        listb.insert(0,"关键词为")
+        # listb.insert(0,str(i)+"个。")
+        # listb.insert(0,"完全匹配的最多有")
+        # listb.insert(0,keyword)
+        # listb.insert(0,"关键词为")
         if  i < k:
-
             print("关键词为"+keyword+"完全匹配的最多有"+str(i)+"个。")
-
         all_d_dict = count_all_distance(aimlat,aimlng,match_df)
         match_list = top_k(all_d_dict,k,isReturnList=True)
         show_info_in_map(aimlat,aimlng,starbucks,match_list,t="4.3.1",isOpenHtml=isOpen)
@@ -406,21 +397,117 @@ def keyword_select(keyword,k,aimlat,aimlng,starbucks,isOpen=False):
         for index, RD in sorted(select_dict.items(), key=lambda value: (value[1][0], value[1][1]), reverse=True):
             # print(RD[0],RD[1],index)
             match_df.loc[i] = starbucks.loc[index]
-            listb.insert(0,match_df.loc[i]["Store Name"])
+            # listb.insert(0,match_df.loc[i]["Store Name"])
             if i == 0:
                 print("关键词为"+keyword+"模糊匹配结果如下：")
                 # listb.insert(0,"关键词为"+keyword+"模糊匹配结果如下：\n")
             print(match_df.loc[i]["Store Name"])
-
+            match_dict[str(index)] = {}
+            match_dict[str(index)]["Store Name"] = match_df.loc[i]["Store Name"]
             i += 1
             if i >= k:
                 break
+        all_d_dict = count_all_distance(aimlat, aimlng, match_df)
+        match_list = top_k(all_d_dict, k, isReturnList=True)
+        show_info_in_map(aimlat, aimlng, starbucks, match_list, t="4.3.2",isOpenHtml=isOpen)
 
+    if isReturnmatch:
+        return match_dict
+    # listb.pack()
+    # root.mainloop()
 
-    all_d_dict = count_all_distance(aimlat, aimlng, match_df)
-    match_list = top_k(all_d_dict, k, isReturnList=True)
-    show_info_in_map(aimlat, aimlng, starbucks, match_list, t="4.3.2",isOpenHtml=isOpen)
+def change_to_matchdict(KorRlist,starbucks):
+    """传入包含经纬度的list,在数据集中查找对应的index"""
+    match_dict = {}
+    for local in KorRlist:
+        lat = str(local[0])
+        lng = str(local[1])
+        # 对于原先为整型的数据，要还原成int，才能在starbucks中找到index。
+        if local[0] % 1 == 0.0:
+            lat = str(int(local[0]))
+        if local[1] % 1 == 0.0:
+            lng = str(int(local[1]))
+        index = starbucks[(starbucks.Latitude == lat) & (starbucks.Longitude == lng)].index.tolist()
+        i = str(index[0])
+        match_dict[i] = {}
+        match_dict[i]["Store Name"] = starbucks.loc[index[0]]["Store Name"]
+    return match_dict
 
-    listb.pack()
-    root.mainloop()
+def grade_read(starbucks):
+    """读取评分记录的文件，如果没有则生成"""
+    if not os.path.exists("starbucks.json"):
+        save_log = {}
+        for index,starbuck in starbucks.iterrows():
+            index = str(index)
+            save_log[index] = {}
+            save_log[index]["Store Name"] = starbuck["Store Name"]
+            # save_log[index]["Latitude"] = starbuck["Latitude"]
+            # save_log[index]["Longitude"] = starbuck["Longitude"]
+            save_log[index]["Grade"] = -1
+            save_log[index]["N"] = 0
+        try:
+            jsobj = json.dumps(save_log)
+            fileobj = open("starbucks.json","w")
+            fileobj.write(jsobj)
+            print("Save Success!")
+            fileobj.close()
+        except:
+            print("Save Error!")
+    else:
+        with open("starbucks.json","r") as fileobj:
+            save_log = json.loads(fileobj.read())
+            print("Read Success!")
+    return save_log
 
+def grade_save(save_log):
+    """将评分记录写入文件中保存下来"""
+    try:
+        jsobj = json.dumps(save_log)
+        fileobj = open("starbucks.json","w")
+        fileobj.write(jsobj)
+        print("Change Success!")
+        fileobj.close()
+    except:
+        print("Change Error!")
+
+def score(match_dict,save_log):
+    """店铺评分功能"""
+    print("编号 店铺名称")
+    # 遍历查询结果并打印
+    for x, y in match_dict.items():
+        if x in save_log and y["Store Name"] == save_log[x]["Store Name"]:
+            # 如果评分高于8分，暂时用*代替特殊标记（需求5.1.4）
+            if float(save_log[x]["Grade"]) >= 8:
+                print(x, y["Store Name"], "*")
+            else:
+                print(x, y["Store Name"])
+    # 点击某个店铺的操作，暂时用输入店铺的编号（index）代替
+    print("店铺评分（输入Q退出）")
+    while True:
+        i = input("请输入店铺的编号：")
+        if i.upper() == "Q":
+            break
+        # 未曾输入过评分（需求5.1.1）
+        if save_log[i]["Grade"] == -1:
+            g = input("请输入店铺的评分：")
+            if g.upper() == "Q":
+                break
+            if float(g) >= 10 or float(g) < 0:
+                print("请输入客观的评分！")
+                continue
+            save_log[i]["Grade"] = g
+            save_log[i]["N"] += 1
+        # 已经输入过评分，暂时当前评分的平均值（需求5.1.2和需求5.1.3）
+        else:
+            print(str(save_log[i]["Store Name"]) + "的平均评分为：%.1f" % (float(save_log[i]["Grade"])))
+            g = input("请输入你的评分：")
+            if g.upper() == "Q":
+                break
+            if float(g) >= 10 or float(g) < 0:
+                print("请输入客观的评分！")
+                continue
+            average_grade = (float(save_log[i]["Grade"]) * float(save_log[i]["N"]) + float(g)) \
+                            / (float(save_log[i]["N"]) + 1)
+            save_log[i]["Grade"] = average_grade
+            save_log[i]["N"] += 1
+            print(str(save_log[i]["Store Name"]) + "的平均评分为：%.1f" % float((save_log[i]["Grade"])))
