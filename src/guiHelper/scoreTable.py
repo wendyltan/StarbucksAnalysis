@@ -6,8 +6,6 @@
 # @Software: PyCharm
 
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-import sys
 from src.util import helper as hp
 
 class MyTable(QWidget):
@@ -18,6 +16,8 @@ class MyTable(QWidget):
         self.table = QTableWidget(self)
         self.table.setColumnCount(3)
         self.match =match
+        self.messageBox = QMessageBox(self)
+
         self.log = log
         self.counter = 0
         self.btn_save = QPushButton('保存')
@@ -41,22 +41,28 @@ class MyTable(QWidget):
         self.table.editable = True
         # 设置为选中一行，默认为选中单格
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.table.cellChanged.connect(self.contentChange)
+
 
         for key,values in self.match.items():
             self.table.setItem(key-1,0,QTableWidgetItem(values['index']))
             self.table.setItem(key-1,1,QTableWidgetItem(values['Store Name']))
-            # if (values['Grade'] == ""):
-            #     gradeItem = QTableWidgetItem(values['Grade'])
-            #     gradeItem.setBackgroundColor(Qt.green)
-            #     self.setItem(key - 1, 2, gradeItem)
-            # else:
-            gradeItem = QTableWidgetItem(values['Grade'])
-            self.table.setItem(key - 1, 2, gradeItem)
-
+            if ( values['Grade']!=''and float(values['Grade']) >=8):
+                print("match")
+                gradeItem = QTableWidgetItem(str(values['Grade']))
+                # can not set the cell color?
+                # gradeItem.setBackground(U)
+                self.table.setItem(key - 1, 2, gradeItem)
+            else :
+                print("no match")
+                self.table.setItem(key - 1, 2, QTableWidgetItem(str(values['Grade'])))
 
         self.setLayout(self.vbox)
-        self.show()
+        self.table.cellChanged.connect(self.contentChange)
+        if (len(self.match) == 0):
+            self.messageBox.warning(self, "Warning", "r or k too small to find any datas!",QMessageBox.Ok)
+            self.destroy()
+        else:
+            self.show()
 
     def save(self):
         # may have to write it back to the log
@@ -66,10 +72,6 @@ class MyTable(QWidget):
         item = self.table.item(row, col)
         txt = item.text()
         # change the match data set
-        if col == 0:
-            self.match[row+1]['index'] = txt
-        elif col == 1:
-            self.match[row+1]['Store Name'] = txt
-        elif col == 2:
-            self.match[row+1]['Grade'] = txt
+        if col == 2:
+            hp.score(self.log,self.match[row+1]['index'],txt)
 

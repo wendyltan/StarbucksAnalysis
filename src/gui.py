@@ -25,10 +25,12 @@ class MainWindow(QMainWindow):
         self.first = True
         # default starbucks and related query parameters
         self.starbucks = qr.get_dataFrame(table)
+        #default value
         self.aimlat = 22.3
-        self.aimlng = 113.7
+        self.aimlng = 113.71
         self.k = 5
         self.r = 15
+        self.keyword = "珠海"
 
         # 设置浏览器
         self.browser = QWebEngineView()
@@ -111,12 +113,18 @@ class MainWindow(QMainWindow):
                 elif (str == 'top-r-score'):
                     action.setChecked(False)
                     # range查询结果进行店铺评分
-
+                    title = str
+                    r_list = hp.top_r(d_dict, self.r, isReturnList=True)
+                    match_range = hp.change_to_matchdict(r_list, self.starbucks,save_log)
+                    self.table = st.MyTable(title, match_range, save_log)
                     break
                 elif (str == 'key-match-k-score'):
                     action.setChecked(False)
                     # 关键词查询结果进行店铺评分
-
+                    title = str
+                    keyword_list = hp.keyword_select(self.keyword, self.k, self.aimlat, self.aimlng, self.starbucks, isReturnList=True, isOpen=False)
+                    match_keyword = hp.change_to_matchdict(keyword_list,self.starbucks,save_log)
+                    self.table = st.MyTable(title, match_keyword, save_log)
                     break
 
 
@@ -155,11 +163,11 @@ class MainWindow(QMainWindow):
         q = self.urlbar.text()
         gen2 = g.Gen()
         if (self.mode == 'k'):
-            lon = float(q.split(',')[0])
-            lat = float(q.split(',')[1])
-            k = int(q.split(',')[2])
-            if (lon >= -180 and lon <= 180 and lat >= -90 and lat <= 90):
-                gen2.run(lon, lat, k, keyword=None, mode=self.mode)
+            self.aimlng = float(q.split(',')[0])
+            self.aimlat = float(q.split(',')[1])
+            self.k = int(q.split(',')[2])
+            if (self.aimlng >= -180 and self.aimlng <= 180 and self.aimlat >= -90 and self.aimlat <= 90):
+                gen2.run(self.aimlng, self.aimlat, self.k, keyword=None, mode=self.mode)
                 if(self.first):
                     self.addChartMenu()
                 self.first = False
@@ -167,11 +175,11 @@ class MainWindow(QMainWindow):
                 self.urlbar.setText("不合法的输入！")
         elif (self.mode == 'r'):
             print("Enter r mode!")
-            lon = float(q.split(',')[0])
-            lat = float(q.split(',')[1])
-            r = int(q.split(',')[2])
-            if (lon >= -180 and lon <= 180 and lat >= -90 and lat <= 90):
-                gen2.run(lon, lat, r, keyword=None, mode=self.mode)
+            self.aimlng = float(q.split(',')[0])
+            self.aimlat = float(q.split(',')[1])
+            self.r = int(q.split(',')[2])
+            if (self.aimlng >= -180 and self.aimlng <= 180 and self.aimlat >= -90 and self.aimlat <= 90):
+                gen2.run(self.aimlng, self.aimlat, self.r, keyword=None, mode=self.mode)
                 if (self.first):
                     self.addChartMenu()
                 self.first = False
@@ -179,12 +187,12 @@ class MainWindow(QMainWindow):
                 self.urlbar.setText("不合法的输入！")
         elif (self.mode == 'm'):
             print("Enter m mode!")
-            lon = float(q.split(',')[0])
-            lat = float(q.split(',')[1])
-            keyword = q.split(',')[2]
-            k = int(q.split(',')[3])
-            if (lon >= -180 and lon <= 180 and lat >= -90 and lat <= 90):
-                gen2.run(lon, lat, k,keyword,  mode=self.mode)
+            self.aimlng = float(q.split(',')[0])
+            self.aimlat = float(q.split(',')[1])
+            self.keyword = q.split(',')[2]
+            self.k = int(q.split(',')[3])
+            if (self.aimlng >= -180 and self.aimlng <= 180 and self.aimlat >= -90 and self.aimlat <= 90):
+                gen2.run(self.aimlng, self.aimlat, self.k,self.keyword,mode=self.mode)
                 if (self.first):
                     self.addChartMenu()
                 self.first = False

@@ -500,7 +500,7 @@ def score(save_log,index_in_starbucks,grade):
             return
         average_grade = (float(save_log[i]["Grade"]) * float(save_log[i]["N"]) + float(g)) \
                         /(float(save_log[i]["N"]) + 1)
-        save_log[i]["Grade"] = average_grade
+        save_log[i]["Grade"] = round(average_grade,2)
         save_log[i]["N"] += 1
         if float(save_log[i]["Grade"]) >= 8:
             save_log[i]["Special"] = True

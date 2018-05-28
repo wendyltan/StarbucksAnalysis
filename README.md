@@ -1,21 +1,15 @@
 # StarbucksAnalysis
 An analytical project for Starbucks dataset
-## Index/src
- - util :工具类所在目录
-    - csv2xlsx :csv格式转xlsx格式
-    - helper: 一些在模块中反复使用的函数
-    - genAllChart:请在此类编写生成图表的逻辑
- - drawChart :画图模块，大部分画图函数请放在这里
- - models:数据库模型类，使用sqlcodegen 生成的请勿改动
- - query :请在这里编写大部分查询数据的函数
- - main :主模块
- - init :初始化
- - dataset :原始数据excel文件目录
- - chartHtml :保存图表html的文件夹
+
+## Require package
+update latter...
+
 ## Usage
-Run `main.py`
+Just run `main.py`
 
 ## 历史开发进度
+- 18/5/28:
+    + **huangyep and Wendy**基本完成查询评分标记需求（但是仍然无法标记颜色）
 - 18/5/20:
     + **jasonli**修改一些错误，增加弹窗显示查询信息
 - 18/5/19:
@@ -40,5 +34,10 @@ Run `main.py`
 - 18/3/20-3/21 **huangyep** 完成地图函数编写，**Wendy** 进行优化并抽象部分函数
 
 - 18/3/19前 : **Wendy**粗略对模块分块，编写部分函数
+
+## Noted
+
+Happy pair programming！Though lack of testing in this project,I find
+it really helpful to code beautiful code and easier to debug through pair-programming.
 
 

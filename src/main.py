@@ -27,8 +27,7 @@ if __name__ == '__main__':
 
 
 
-
-    # # 下面的代码和import的东西等迭代结束了再删掉，不然需要修改的话又得重新去找
+    # 下面的代码和import的东西等迭代结束了再删掉，不然需要修改的话又得重新去找
     # starbucks = qr.get_dataFrame(table)
     # aimlat = 22.3
     # aimlng = 113.7
@@ -45,6 +44,8 @@ if __name__ == '__main__':
     # print(k_list)
     # match_topk = hp.change_to_matchdict(k_list, starbucks,save_log)
     # print(match_topk)
+    # hp.score(save_log,4369,"8")
+
     #
     # # range查询结果进行店铺评分
     # print("Range:")
