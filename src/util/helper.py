@@ -470,6 +470,7 @@ def grade_save(save_log):
     except:
         print("Change Error!")
 
+# write a loop in it make this hard to be used!
 def score(match_dict,save_log):
     """店铺评分功能"""
     print("编号 店铺名称")

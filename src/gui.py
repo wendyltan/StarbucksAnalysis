@@ -3,10 +3,11 @@ from PyQt5.QtGui import *
 from PyQt5.QtWebEngineWidgets import *
 import os
 from PyQt5.QtWidgets import *
-
+from src.guiHelper import scoreTable as st
 from src.util import genAllChart as g
-
-
+from src import query as qr
+from src.util import helper as hp
+from src import table
 class MainWindow(QMainWindow):
 
 
@@ -22,6 +23,12 @@ class MainWindow(QMainWindow):
         # default mode
         self.mode = 'k'
         self.first = True
+        # default starbucks and related query parameters
+        self.starbucks = qr.get_dataFrame(table)
+        self.aimlat = 22.3
+        self.aimlng = 113.7
+        self.k = 5
+        self.r = 15
 
         # 设置浏览器
         self.browser = QWebEngineView()
@@ -41,6 +48,9 @@ class MainWindow(QMainWindow):
         self.addToolBar(navigation_bar)
         self.fileMenu = menubar.addMenu('显示图表')
         self.modeMenu = menubar.addMenu('选择模式')
+        self.scoreMenu = menubar.addMenu('进入评分')
+
+
 
         # 添加URL地址栏
         self.urlbar = QLineEdit()
@@ -53,6 +63,7 @@ class MainWindow(QMainWindow):
         if (not os.path.exists(os.path.curdir + '\\chartHtml\\')):
             os.mkdir(os.path.curdir + '\\chartHtml\\')
 
+        #modeMenu options
         Action1 = QAction('top-k', self)
         Action1.setCheckable(True)
         Action1.triggered.connect(self.handleMode)
@@ -66,7 +77,63 @@ class MainWindow(QMainWindow):
         Action3.triggered.connect(self.handleMode)
         self.modeMenu.addAction(Action3)
 
+        #scoreMenu options
+        Action4 = QAction('top-k-score', self)
+        Action4.setCheckable(True)
+        Action4.triggered.connect(self.handleScore)
+        self.scoreMenu.addAction(Action4)
+        Action5 = QAction('top-r-score', self)
+        Action5.setCheckable(True)
+        Action5.triggered.connect(self.handleScore)
+        self.scoreMenu.addAction(Action5)
+        Action6 = QAction('key-match-k-score', self)
+        Action6.setCheckable(True)
+        Action6.triggered.connect(self.handleScore)
+        self.scoreMenu.addAction(Action6)
+
         self.show()
+    def handleScore(self):
+
+        # 读取评分记录
+        save_log = hp.grade_read(self.starbucks)
+        print(save_log)
+        d_dict = hp.count_all_distance(self.aimlat, self.aimlng, self.starbucks)
+        print(d_dict)
+        for action in self.scoreMenu.actions():
+            if action.isChecked():
+                str = action.text()
+                if (str == 'top-k-score'):
+                    action.setChecked(False)
+                    #pass in top-k score function to it
+                    # top-k查询结果进行店铺评分
+                    print("Top-K:")
+                    k_list = hp.top_k(d_dict,self.k,isReturnList=True)
+                    match_topk = hp.change_to_matchdict(k_list,self.starbucks)
+                    # hp.score(match_topk,save_log)
+                    self.table = st.MyTable(match_topk,save_log)
+                    break
+                elif (str == 'top-r-score'):
+                    action.setChecked(False)
+                    # range查询结果进行店铺评分
+                    print("Range:")
+                    r_list = hp.top_r(d_dict,self.r,isReturnList=True)
+                    match_range = hp.change_to_matchdict(r_list,self.starbucks)
+                    hp.score(match_range, save_log)
+
+                    self.table = st.MyTable()
+                    break
+                elif (str == 'key-match-k-score'):
+                    action.setChecked(False)
+                    # 关键词查询结果进行店铺评分
+                    print("Keyword-Select:")
+                    keyword = "珠海"
+                    match_keyword = hp.keyword_select(self.keyword, self.k, self.aimlat, self.aimlng, self.starbucks, isReturnmatch=True, isOpen=False)
+                    hp.score(match_keyword,save_log)
+
+                    self.table = st.MyTable()
+                    break
+
+
 
     def handleMode(self):
         for action in self.modeMenu.actions():
