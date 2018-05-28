@@ -96,41 +96,27 @@ class MainWindow(QMainWindow):
 
         # 读取评分记录
         save_log = hp.grade_read(self.starbucks)
-        print(save_log)
         d_dict = hp.count_all_distance(self.aimlat, self.aimlng, self.starbucks)
-        print(d_dict)
         for action in self.scoreMenu.actions():
             if action.isChecked():
                 str = action.text()
                 if (str == 'top-k-score'):
                     action.setChecked(False)
-                    #pass in top-k score function to it
                     # top-k查询结果进行店铺评分
-                    print("Top-K:")
+                    title = str
                     k_list = hp.top_k(d_dict,self.k,isReturnList=True)
-                    match_topk = hp.change_to_matchdict(k_list,self.starbucks)
-                    # hp.score(match_topk,save_log)
-                    self.table = st.MyTable(match_topk,save_log)
+                    match_topk = hp.change_to_matchdict(k_list, self.starbucks, save_log)
+                    self.table = st.MyTable(title,match_topk,save_log)
                     break
                 elif (str == 'top-r-score'):
                     action.setChecked(False)
                     # range查询结果进行店铺评分
-                    print("Range:")
-                    r_list = hp.top_r(d_dict,self.r,isReturnList=True)
-                    match_range = hp.change_to_matchdict(r_list,self.starbucks)
-                    hp.score(match_range, save_log)
 
-                    self.table = st.MyTable()
                     break
                 elif (str == 'key-match-k-score'):
                     action.setChecked(False)
                     # 关键词查询结果进行店铺评分
-                    print("Keyword-Select:")
-                    keyword = "珠海"
-                    match_keyword = hp.keyword_select(self.keyword, self.k, self.aimlat, self.aimlng, self.starbucks, isReturnmatch=True, isOpen=False)
-                    hp.score(match_keyword,save_log)
 
-                    self.table = st.MyTable()
                     break
 
 
