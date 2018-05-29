@@ -9,7 +9,9 @@ from src import query as qr
 from src.util import helper as hp
 from src import table
 class MainWindow(QMainWindow):
-
+    """
+    Main gui class of the program.
+    """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

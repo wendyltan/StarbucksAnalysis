@@ -1,11 +1,103 @@
 # StarbucksAnalysis
 An analytical project for Starbucks dataset
 
+## Requirement
+ 
+### Iteration 1
+- RQ1
+
+    1.在世界地图上显示所有店铺的位置
+    当选中某个店铺时，可以看到店铺的详细信息，如编号、名称、地址、邮编、电话等
+    
+    2.在将属于不同时区的店铺用不同颜色的点显示，统计每个时区中店铺的数量或密度，并可视化的展示统计结果
+    
+    3.根据国家和经纬度将地图划分成不同的区域，用渐变色标识每个区域店铺数量
+    举例：区域涂为深红色表示店铺数量/密度最高、正红色表示表示店铺数量/密度中等、浅红色表示表示店铺数量/密度较低、白色表示该区域没有店铺
+    
+    4.统计每个国家拥有店铺的数量/密度，并可视化地给出统计结果
+
+### Iteration 2
+- RQ1——不同时区店铺数量渐变图：
+
+    + 是第2轮迭代中“在将属于不同时区的店铺用不同颜色的点显示”的修改版
+    
+    + 用渐变色标识每个时区的店铺数量
+
+    + 举例：店铺数量多的时区中的点用深红色、数量中等用正红色、数量少用浅红色
+- RQ2——距离top-k查询：
+    + 用户输入经纬度和一个参数k，展示距离其最近的k个星巴克
+        
+        1.直接根据经纬度计算距离即可，无需考虑建筑物、道路等因素的影响
+        
+        2.如果用户输入的经纬度不合法，需要提示用户。
+        
+        3.对用户的每一次输入，展示查询时延（即从查询发出，到结果返回所需要的时间）
+    + 用户输入经纬度，可视化展示随着k的增长查询时延的变化
+
+### Iteration 3
+- RQ1—— 如果第3轮的查询执行较慢，则需要显示查询执行的进度条
+- RQ2——距离range查询：
+    
+    1.用户输入经纬度（la,lo）和距离半径r，展示以（la,lo）为中心，r为半径内的所有店铺
+    
+    2.用户输入经纬度，可视化展示随着k的增长查询时延的变化
+- RQ3—— 关键字+距离top-k查询
+    
+    1.用户输入关键词和经纬度（la,lo），展示与（la,lo）最近的k个匹配关键词的店铺
+    
+    2.如果不存在完全匹配关键词的店铺，则需要想办法找到与关键词相似的店铺（先按相似度排序，相似度相同时按距离排序）
+### Iteration 4
+- RQ1——店铺评分和展示评分功能
+
+    1.用户可以点击某个查询结果里的店铺，输入对该店铺的评分（0到10分）
+    
+    2.如果某个店铺曾经被输入评分，则下次查询时展示该评分；
+    
+    3.如果某店铺被多次输入评分，则展示评分的平均值
+
+    4.评分高于8分的店铺在top-k、range、top-k+关键词的查询结果里用特殊标记标明
+
+- RQ2——完善功能+重构
+
+    之前迭代中可能存在了很多遗留问题没有解决，在本轮迭代中解决它们
+
+- RQ3——将整个项目打包成一个exe文件
+
+    无需安装环境就可以执行
 ## Require package
-update latter...
+- `fuzzywuzzy` at least `0.16.0`
+- `pandas` at least `0.22.0`
+- `ploty` at least `2.5.0`
+- `pycountry` at least `18.2.23`
+- `PyQt5` at least `5.10.1`
+- `python-Levenshtein` at least `0.12.0`
 
 ## Usage
 Just run `main.py`
+
+## Project Structure
+- Folder:
+    + *chartHtml* : Store the generated html files
+    
+    + *dataset*: Store the orginal dataset(xlsx and csv file)
+    
+    + *guiHelper* : Extra gui ,like table or dialog,etc..
+    
+    + *icons* : icons for main gui
+    
+    + *test*: simple test files
+    
+    + *util*: most of the `.py` deal with requirements go in here
+- Scripts:
+    + **drawChart.py**: use to draw Map.All drawing method place here.
+    
+    + **gui.py** : main user interface
+    
+    + **main.py** : run this to exec the program
+    
+    + ~~**models.py**~~ : deprecated after getDataframe() is invoked
+    
+    + ~~**query.py**~~ : deprecated after getDataframe() is invoked
 
 ## 历史开发进度
 - 18/5/28:

@@ -4,6 +4,11 @@
 # @Author  : Wendyltanpcy
 # @File    : query.py
 # @Software: PyCharm
+
+"""
+Do basic data query from db.
+After getting the Dataframe data structure,this script is useless.
+"""
 from pandas import DataFrame
 from sqlalchemy import func
 from sqlalchemy import distinct
@@ -135,10 +140,12 @@ def get_position(table,range='world',country_code=None):
 
     s.close()
 
+
 def get_dataFrame(table):
     """
     combine all data in database into dataframe format
     'basically this function fuck up everything!'
+    But we still get the data out from the db,right?
     :param table:
     :return:
     """

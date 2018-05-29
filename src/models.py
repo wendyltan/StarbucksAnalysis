@@ -2,6 +2,9 @@
 '''
 auto generated file by
 sqlacodegen sqlite:///starbucks.db > models.py
+used for sqlalchemy operation
+In fact already deprecated in current program
+That is,useless since requirement 1
 '''
 
 from sqlalchemy import Column, Integer, Table, Text

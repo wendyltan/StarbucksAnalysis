@@ -15,7 +15,7 @@ from fuzzywuzzy import fuzz
 
 class Gen():
     """
-    do not put this long smelly code in main. Use a class as a module import  instead
+    Generate requirement charts in this class.Use gui to invoke the run method.
     """
     def run(self, lon,lat, r_or_k,keyword=None,mode='k'):
         # # 第2次迭代，需求1按经纬度绘制散点图

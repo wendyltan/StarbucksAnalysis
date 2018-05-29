@@ -16,7 +16,6 @@ from src import table
 import time
 import os
 
-
 if __name__ == '__main__':
 
     # 程序主循环
@@ -24,8 +23,6 @@ if __name__ == '__main__':
     window = br.MainWindow()
     window.show()
     app.exec_()
-
-
 
     # 下面的代码和import的东西等迭代结束了再删掉，不然需要修改的话又得重新去找
     # starbucks = qr.get_dataFrame(table)
