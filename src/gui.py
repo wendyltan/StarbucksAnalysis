@@ -95,6 +95,8 @@ class MainWindow(QMainWindow):
         Action6.triggered.connect(self.handleScore)
         self.scoreMenu.addAction(Action6)
 
+        gen1 =  g.Gen()
+        gen1.run(0, 0, 0, None, '')
         self.show()
     def handleScore(self):
 
