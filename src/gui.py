@@ -50,7 +50,8 @@ class MainWindow(QMainWindow):
         navigation_bar.setIconSize(QSize(32, 32))
         # 添加导航栏到窗口中
         self.addToolBar(navigation_bar)
-        self.fileMenu = menubar.addMenu('显示图表')
+        self.normalMenu = menubar.addMenu('常规图表')
+        self.fileMenu = menubar.addMenu('模式图表')
         self.modeMenu = menubar.addMenu('选择模式')
         self.scoreMenu = menubar.addMenu('进入评分')
 
@@ -64,8 +65,8 @@ class MainWindow(QMainWindow):
 
         navigation_bar.addSeparator()
         navigation_bar.addWidget(self.urlbar)
-        if (not os.path.exists(os.path.curdir + '\\chartHtml\\')):
-            os.mkdir(os.path.curdir + '\\chartHtml\\')
+        if (not os.path.exists(os.path.curdir + '\\modeHtml\\')):
+            os.mkdir(os.path.curdir + '\\modeHtml\\')
 
         #modeMenu options
         Action1 = QAction('top-k', self)
@@ -94,6 +95,13 @@ class MainWindow(QMainWindow):
         Action6.setCheckable(True)
         Action6.triggered.connect(self.handleScore)
         self.scoreMenu.addAction(Action6)
+
+        self.normalUrls = os.listdir(os.path.curdir + '/chartHtml')
+        for item in self.normalUrls:
+            itemAction = QAction(item.title().replace('.Html', ''), self)
+            itemAction.setCheckable(True)
+            itemAction.triggered.connect(self.showNormalChart)
+            self.normalMenu.addAction(itemAction)
 
         gen1 =  g.Gen()
         gen1.run(0, 0, 0, None, '')
@@ -157,6 +165,15 @@ class MainWindow(QMainWindow):
         # get actions
         for action in self.fileMenu.actions():
             if action.isChecked():
+                url = os.path.abspath("modeHtml/" + action.text() + '.html')
+                # remember to unchecked !
+                action.setChecked(False)
+                self.browser.load(QUrl.fromLocalFile(url))
+                self.setCentralWidget(self.browser)
+
+    def showNormalChart(self):
+        for action in self.normalMenu.actions():
+            if action.isChecked():
                 url = os.path.abspath("chartHtml/" + action.text() + '.html')
                 # remember to unchecked !
                 action.setChecked(False)
@@ -204,12 +221,14 @@ class MainWindow(QMainWindow):
                 self.urlbar.setText("不合法的输入！")
 
     def addChartMenu(self):
-        self.urlList = os.listdir(os.path.curdir + '/chartHtml')
+        self.urlList = os.listdir(os.path.curdir + '/modeHtml')
         for item in self.urlList:
             itemAction = QAction(item.title().replace('.Html', ''), self)
             itemAction.setCheckable(True)
             itemAction.triggered.connect(self.showDataChart)
             self.fileMenu.addAction(itemAction)
+
+
 
 
 

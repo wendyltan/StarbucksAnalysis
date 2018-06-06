@@ -17,7 +17,7 @@ py.plotly.tools.set_credentials_file(username="wendyltanpcy", api_key="Uka0AT8x2
 mapbox_access_token = "pk.eyJ1Ijoid2VuZHlsdGFucGN5IiwiYSI6ImNqZ2dvc3ZkNjAwMW0ycW1ldXg2c3RkdW0ifQ.9W6uXdtELkw6ECHl6my-qg"
 
 
-def gen_Bar(datalist1,datalist2,title,export=False,isOpen=False):
+def gen_Bar(datalist1,datalist2,title,export=False,isOpen=False,folder='modeHtml/'):
     """
     绘制条形图
     :param datalist1:
@@ -39,10 +39,10 @@ def gen_Bar(datalist1,datalist2,title,export=False,isOpen=False):
     if export:
         off.plot(fig,image='jpeg',image_filename=title,auto_open=isOpen)
     else:
-        off.plot(fig, filename='chartHtml/'+title+'.html',auto_open=isOpen)
+        off.plot(fig, filename=folder+title+'.html',auto_open=isOpen)
 
 
-def gen_Scatter(datalist1,datalist2,title,export=False,isOpen=False):
+def gen_Scatter(datalist1,datalist2,title,export=False,isOpen=False,folder='modeHtml/'):
     """
     绘制散点图
     :param datalist1:
@@ -62,10 +62,10 @@ def gen_Scatter(datalist1,datalist2,title,export=False,isOpen=False):
     if export:
         off.plot(fig,image='jpeg',image_filename=title)
     else:
-        off.plot(fig, filename='chartHtml/'+title+'.html',auto_open=isOpen)
+        off.plot(fig, filename=folder+title+'.html',auto_open=isOpen)
 
 
-def gen_Pie(datalist1,datalist2,title,export=False,isOpen=False):
+def gen_Pie(datalist1,datalist2,title,export=False,isOpen=False,folder='modeHtml/'):
     """
     绘制饼图
     :param datalist1:
@@ -92,9 +92,9 @@ def gen_Pie(datalist1,datalist2,title,export=False,isOpen=False):
     if export:
         off.plot(fig,image='jpeg',image_filename=title)
     else:
-        off.plot(fig, filename='chartHtml/'+title+'.html',auto_open=isOpen)
+        off.plot(fig, filename=folder+title+'.html',auto_open=isOpen)
 
-def draw_line_plot(datalist_x,datalist_y,title,export=False,isOpen=False):
+def draw_line_plot(datalist_x,datalist_y,title,export=False,isOpen=False,folder='modeHtml/'):
     trace = go.Scatter(
         x=datalist_x,
         y=datalist_y
@@ -103,11 +103,11 @@ def draw_line_plot(datalist_x,datalist_y,title,export=False,isOpen=False):
     if export:
         off.plot(data,image='jpeg',image_filename=title,auto_open=isOpen)
     else:
-        off.plot(data, filename='chartHtml/'+title+'.html',auto_open=isOpen)
+        off.plot(data, filename=folder+title+'.html',auto_open=isOpen)
 
 
 def draw_map(starbucks,continent='world',export=False,isTimeZone=False,isOpen=False,scl=0,size=3,
-             newtitle="1.",enter_la=22.25,enter_lon= 113.53,mode='mapbox'):
+             newtitle="2.",enter_la=22.25,enter_lon= 113.53,mode='mapbox',folder='modeHtml/'):
     #是否根据时区筛选
     if not isTimeZone:
         starbucks['text'] = starbucks['City'] + ',' + starbucks["Store Name"]
@@ -211,12 +211,12 @@ def draw_map(starbucks,continent='world',export=False,isTimeZone=False,isOpen=Fa
                      image_filename=continent.title(),auto_open=isOpen)
         else:
             if isTimeZone:
-                off.plot(fig, filename='chartHtml/'+ newtitle + '2 星巴克按时区分布.html',auto_open=isOpen)
+                off.plot(fig, filename=folder+ newtitle + '2 星巴克按时区分布.html',auto_open=isOpen)
             else:
-                off.plot(fig, filename='chartHtml/' + newtitle + '1 星巴克世界分布.html', auto_open=isOpen)
+                off.plot(fig, filename=folder + newtitle + '1 星巴克世界分布.html', auto_open=isOpen)
 
 
-def draw_map_by_country(starbucks,title="Default",isOpen=False):
+def draw_map_by_country(starbucks,title="Default",isOpen=False,folder='modeHtml/'):
     data = [dict(
         type='choropleth',
         locations=starbucks['Country Code'],
@@ -247,5 +247,5 @@ def draw_map_by_country(starbucks,title="Default",isOpen=False):
         )
     )
     fig = dict(data=data, layout=layout)
-    off.plot(fig, filename='chartHtml/'+title+'.html',auto_open=isOpen)
+    off.plot(fig, filename=folder+title+'.html',auto_open=isOpen)
 

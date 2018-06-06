@@ -14,7 +14,7 @@ class MyTable(QWidget):
         self.setWindowTitle(title)
         self.resize(600, 300)
         self.table = QTableWidget(self)
-        self.table.setColumnCount(3)
+        self.table.setColumnCount(4)
         self.match =match
         self.messageBox = QMessageBox(self)
 
@@ -34,7 +34,7 @@ class MyTable(QWidget):
         self.table.setRowCount(self.counter)
 
         # 设置表头
-        self.table.setHorizontalHeaderLabels(['编号', '店铺名', '评分'])
+        self.table.setHorizontalHeaderLabels(['编号', '店铺名', '评分','标记'])
         self.table.setVerticalHeaderLabels(label_list)
 
         self.table.setEditTriggers(QAbstractItemView.AllEditTriggers)
@@ -52,9 +52,11 @@ class MyTable(QWidget):
                 # can not set the cell color?
                 # gradeItem.setBackground(U)
                 self.table.setItem(key - 1, 2, gradeItem)
+                self.table.setItem(key - 1, 3,QTableWidgetItem("*"))
             else :
                 print("no match")
                 self.table.setItem(key - 1, 2, QTableWidgetItem(str(values['Grade'])))
+                self.table.setItem(key - 1, 3, QTableWidgetItem(""))
 
         self.setLayout(self.vbox)
         self.table.cellChanged.connect(self.contentChange)
