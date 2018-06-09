@@ -100,6 +100,8 @@ Just run `main.py`
     + ~~**query.py**~~ : deprecated after getDataframe() is invoked
 
 ## 历史开发进度
+- 18/6/9:
+    + 全员进行了一次目录结构的重构，并且抽象出一些类运用了三种设计模式
 - 18/5/28:
     + **huangyep and Wendy**基本完成查询评分标记需求（但是仍然无法标记颜色）
 - 18/5/20:
