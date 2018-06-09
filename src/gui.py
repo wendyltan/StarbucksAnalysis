@@ -16,7 +16,7 @@ class MainWindow(QMainWindow):
     """
     Main gui class of the program.
     """
-
+    isDone = False
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # 设置窗口标题
@@ -199,6 +199,13 @@ class MainWindow(QMainWindow):
                 if(self.first):
                     self.addChartMenu()
                 self.first = False
+                global isDone
+                while( isDone ==False):
+                    i = 1
+                url = os.path.abspath("modeHtml/随着K值得增长查询时延的变化.html")
+                self.browser.load(QUrl.fromLocalFile(url))
+                self.setCentralWidget(self.browser)
+                isDone = False
             else:
                 self.urlbar.setText("不合法的输入！")
         elif (self.mode == 'r'):
@@ -211,6 +218,12 @@ class MainWindow(QMainWindow):
                 if (self.first):
                     self.addChartMenu()
                 self.first = False
+                while( isDone ==False):
+                    i = 1
+                url = os.path.abspath("modeHtml/随着R值得增长查询时延的变化.html")
+                self.browser.load(QUrl.fromLocalFile(url))
+                self.setCentralWidget(self.browser)
+                isDone = False
             else:
                 self.urlbar.setText("不合法的输入！")
         elif (self.mode == 'm'):

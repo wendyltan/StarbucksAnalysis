@@ -11,6 +11,7 @@ from src import drawChart as dc
 from src.model.MyDF import MyDataFrame
 from src.util import frameobj_helper as hp
 from src import *
+from src import observer
 import time
 
 
@@ -124,6 +125,7 @@ class Gen():
             # 用户输入：搜索关键词keyword,目标经纬度，查找的数量k
             hp.keyword_select(keyword, r_or_k, aimlat, aimlng, self.starbucks)
 
-
+        ob = observer.MapData()
+        ob.set_measurement()
         print("All modeHtml generate success!")
         return True
