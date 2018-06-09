@@ -9,7 +9,6 @@ import os
 
 import pycountry
 
-from src import query as qr
 import pandas as pd
 
 

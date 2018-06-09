@@ -7,14 +7,7 @@
 
 
 import sys
-import pandas as pd
-from src import drawChart as dc
-from src import gui as br
-from src import query as qr
-from src.util import frameobj_helper as hp
-from src import table
-import time
-import os
+from src.view import gui as br
 
 if __name__ == '__main__':
 

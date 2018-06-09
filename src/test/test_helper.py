@@ -4,11 +4,13 @@
 # @Author  : Wendyltanpcy
 # @File    : test_helper.py
 # @Software: PyCharm
+import math
 import unittest
 
 import src.model.MyDF
-import src.util.no_frameobj_helper
-from src.util import frameobj_helper as hp
+import src.controller.no_frameobj_helper
+
+
 class TestHelper(unittest.TestCase):
     """
     Written all test codes here,currently only for frameobj_helper.py
@@ -20,16 +22,16 @@ class TestHelper(unittest.TestCase):
 
     def test_row_into_list(self):
         result=(('1','2'),('A','B'))
-        list = src.util.no_frameobj_helper.row_into_list(result)
+        list = src.controller.no_frameobj_helper.row_into_list(result)
         self.assertEquals(list,[('1','2'),('A','B')])
 
     def test_check_if_valid(self):
         country_code='AE'
-        self.assertTrue(src.util.no_frameobj_helper.check_if_valid(country_code))
+        self.assertTrue(src.controller.no_frameobj_helper.check_if_valid(country_code))
 
     def test_check_map_range_valid(self):
         continent = 'asia'
-        self.assertFalse(src.util.no_frameobj_helper.check_map_range_valid(continent))
+        self.assertFalse(src.controller.no_frameobj_helper.check_map_range_valid(continent))
         
     def test_distance(self,lat1,lng1,lat2,lng2):
         radlat1 = math.radians(lat1)
@@ -47,7 +49,7 @@ class TestHelper(unittest.TestCase):
         self.assertEquals(s,distance);
 
     def test_top_k(self):
-        self.assertFalse(103.84,36.05,top_k(101.76,36.63))
+        self.assertFalse(103.84, 36.05, src.top_k(101.76, 36.63))
         
     def test_count_starbucks_quantity_for_df(self):
         country="CN"
