@@ -6,7 +6,9 @@
 # @Software: PyCharm
 
 from PyQt5.QtWidgets import *
-from src.util import helper as hp
+
+import src.util.no_frameobj_helper
+from src.util import frameobj_helper as hp
 
 class MyTable(QWidget):
     def __init__(self,title,match,log):
@@ -68,12 +70,12 @@ class MyTable(QWidget):
 
     def save(self):
         # may have to write it back to the log
-        hp.grade_save(save_log=self.log)
+        src.util.no_frameobj_helper.grade_save(save_log=self.log)
 
     def contentChange(self,row,col):
         item = self.table.item(row, col)
         txt = item.text()
         # change the match data set
         if col == 2:
-            hp.score(self.log,self.match[row+1]['index'],txt)
+            src.util.no_frameobj_helper.score(self.log, self.match[row + 1]['index'], txt)
 

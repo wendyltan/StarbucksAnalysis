@@ -3,11 +3,15 @@ from PyQt5.QtGui import *
 from PyQt5.QtWebEngineWidgets import *
 import os
 from PyQt5.QtWidgets import *
+
+import src.model.MyDF
+import src.util.no_frameobj_helper
 from src.guiHelper import scoreTable as st
 from src.util import genAllChart as g
 from src import query as qr
-from src.util import helper as hp
+from src.util import frameobj_helper as hp
 from src import table
+from src.model.MyDF import MyDataFrame
 class MainWindow(QMainWindow):
     """
     Main gui class of the program.
@@ -26,7 +30,10 @@ class MainWindow(QMainWindow):
         self.mode = 'k'
         self.first = True
         # default starbucks and related query parameters
-        self.starbucks = qr.get_dataFrame(table)
+        dataframe = qr.get_dataFrame(table)
+        self.starbucks = MyDataFrame()
+        self.starbucks.setDataFrame(dataframe)
+        self.starbucks.setTable(table)
         #default value
         self.aimlat = 22.3
         self.aimlng = 113.71
@@ -109,7 +116,7 @@ class MainWindow(QMainWindow):
     def handleScore(self):
 
         # 读取评分记录
-        save_log = hp.grade_read(self.starbucks)
+        save_log = self.starbucks.grade_read()
         d_dict = hp.count_all_distance(self.aimlat, self.aimlng, self.starbucks)
         for action in self.scoreMenu.actions():
             if action.isChecked():
@@ -118,7 +125,7 @@ class MainWindow(QMainWindow):
                     action.setChecked(False)
                     # top-k查询结果进行店铺评分
                     title = str
-                    k_list = hp.top_k(d_dict,self.k,isReturnList=True)
+                    k_list = src.util.no_frameobj_helper.top_k(d_dict, self.k, isReturnList=True)
                     match_topk = hp.change_to_matchdict(k_list, self.starbucks, save_log)
                     self.table = st.MyTable(title,match_topk,save_log)
                     break
@@ -126,7 +133,7 @@ class MainWindow(QMainWindow):
                     action.setChecked(False)
                     # range查询结果进行店铺评分
                     title = str
-                    r_list = hp.top_r(d_dict, self.r, isReturnList=True)
+                    r_list = src.util.no_frameobj_helper.top_r(d_dict, self.r, isReturnList=True)
                     match_range = hp.change_to_matchdict(r_list, self.starbucks,save_log)
                     self.table = st.MyTable(title, match_range, save_log)
                     break

@@ -10,7 +10,9 @@ functions in this script deal with map or chart drawing
 import plotly.graph_objs as go
 import plotly.offline as off
 import plotly.plotly as py
-from src.util import helper as hp
+
+import src.util.no_frameobj_helper
+from src.util import frameobj_helper as hp
 
 #set up username and api_key and mapbox access token if you want to use mapbox!
 py.plotly.tools.set_credentials_file(username="wendyltanpcy", api_key="Uka0AT8x27B5sQpdbSTs")
@@ -117,7 +119,7 @@ def draw_map(starbucks,continent='world',export=False,isTimeZone=False,isOpen=Fa
         use_color = starbucks["Rgb Value"]
 
     #判断地图范围参数是否有效
-    if hp.check_map_range_valid(continent):
+    if src.util.no_frameobj_helper.check_map_range_valid(continent):
         print("Please enter valid range name!")
     else:
         fig = None

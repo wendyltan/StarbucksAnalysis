@@ -4,11 +4,9 @@
 # @Author  : Wendyltanpcy
 # @File    : __init__.py
 # @Software: PyCharm
-import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from src import models as md
-
+from src.model import models as md
 
 file_name = 'dataset/dataset.xlsx'
 db_name = 'starbucks.db'

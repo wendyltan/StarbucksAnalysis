@@ -5,10 +5,13 @@
 # @File    : test_helper.py
 # @Software: PyCharm
 import unittest
-from src.util import helper as hp
+
+import src.model.MyDF
+import src.util.no_frameobj_helper
+from src.util import frameobj_helper as hp
 class TestHelper(unittest.TestCase):
     """
-    Written all test codes here,currently only for helper.py
+    Written all test codes here,currently only for frameobj_helper.py
     """
 
     def setUp(self):
@@ -17,16 +20,16 @@ class TestHelper(unittest.TestCase):
 
     def test_row_into_list(self):
         result=(('1','2'),('A','B'))
-        list = hp.row_into_list(result)
+        list = src.util.no_frameobj_helper.row_into_list(result)
         self.assertEquals(list,[('1','2'),('A','B')])
 
     def test_check_if_valid(self):
         country_code='AE'
-        self.assertTrue(hp.check_if_valid(country_code))
+        self.assertTrue(src.util.no_frameobj_helper.check_if_valid(country_code))
 
     def test_check_map_range_valid(self):
         continent = 'asia'
-        self.assertFalse(hp.check_map_range_valid(continent))
+        self.assertFalse(src.util.no_frameobj_helper.check_map_range_valid(continent))
         
     def test_distance(self,lat1,lng1,lat2,lng2):
         radlat1 = math.radians(lat1)
@@ -48,7 +51,7 @@ class TestHelper(unittest.TestCase):
         
     def test_count_starbucks_quantity_for_df(self):
         country="CN"
-        count=hp.count_stabucks_quantity_for_df()
+        count= src.model.MyDF.count_stabucks_quantity_for_df()
         self.assertEqual(2735,count)
 
 

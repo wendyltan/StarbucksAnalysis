@@ -12,7 +12,9 @@ After getting the Dataframe data structure,this script is useless.
 from pandas import DataFrame
 from sqlalchemy import func
 from sqlalchemy import distinct
-from src.util import helper as hp
+
+import src.util.no_frameobj_helper
+from src.util import frameobj_helper as hp
 from src import Session
 
 def get_number_of_country(table,times):
@@ -27,7 +29,7 @@ def get_number_of_country(table,times):
     count = func.count(table.country)
     #select top n of country and their store numbers
     result = s.query(table.country,count).group_by(table.country).order_by(count.desc()).limit(times)
-    result_list = hp.row_into_list(result)
+    result_list = src.util.no_frameobj_helper.row_into_list(result)
     s.close()
     return result_list
 
@@ -40,11 +42,11 @@ def select_city_from_country(table,times,country_code):
     :return:
     '''
 
-    if hp.check_if_valid(country_code):
+    if src.util.no_frameobj_helper.check_if_valid(country_code):
         s = Session()
         count = func.count(table.city)
         result = s.query(table.city,count).filter(table.country==country_code).group_by(table.city).order_by(count.desc()).limit(times)
-        result_list = hp.row_into_list(result)
+        result_list = src.util.no_frameobj_helper.row_into_list(result)
         s.close()
         return result_list
     else:
@@ -78,14 +80,14 @@ def get_country_store_info(table,country_code):
     :return:
     '''
 
-    if hp.check_if_valid(country_code):
+    if src.util.no_frameobj_helper.check_if_valid(country_code):
         s = Session()
         basic = s.query(table.city,table.store_number,table.store_name,table.street_address).filter(table.country==country_code).all()
         count = s.query(func.count(table.store_name)).filter(table.country==country_code).all()
         for row in count:
             count = row[0]
 
-        basic_info = hp.row_into_list(basic)
+        basic_info = src.util.no_frameobj_helper.row_into_list(basic)
         top_ten = select_city_from_country(table,10,country_code)
 
         s.close()
@@ -122,17 +124,17 @@ def get_position(table,range='world',country_code=None):
     if range == 'world':
         #返回世界范围的店铺位置信息
         result = s.query(distinct(table.store_name),table.city,table.longitude,table.latitude).all()
-        result_list = hp.row_into_list(result)
+        result_list = src.util.no_frameobj_helper.row_into_list(result)
         return result_list
-    elif range == 'country' and hp.check_if_valid(country_code):
+    elif range == 'country' and src.util.no_frameobj_helper.check_if_valid(country_code):
         #返回某个国家的店铺位置信息
         city_count = func.count(table.city)
         store_city_count = s.query(table.city,city_count).filter(table.country==country_code).group_by(table.city).order_by(city_count.desc()).all()
         store_position = s.query(table.store_name,table.city,table.longitude,table.latitude).filter(table.country==country_code)\
         .group_by(table.store_name).all()
 
-        count = hp.row_into_list(store_city_count)
-        position = hp.row_into_list(store_position)
+        count = src.util.no_frameobj_helper.row_into_list(store_city_count)
+        position = src.util.no_frameobj_helper.row_into_list(store_position)
         return count,position
 
     else:
@@ -153,7 +155,7 @@ def get_dataFrame(table):
     result = s.query(table.store_name,table.city,table.store_number,table.brand,\
                      table.ownership_type,table.street_address,table.country,table.postcode,table.phone_number,\
                      table.longitude,table.latitude,table.timezone,table.stateprovince).all()
-    result_list = hp.row_into_list(hp.get_seperate_list(result))
+    result_list = src.util.no_frameobj_helper.row_into_list(src.util.no_frameobj_helper.get_seperate_list(result))
     starbucks = {}
     starbucks["Store Name"] = result_list[0]
     starbucks["City"] = result_list[1]
