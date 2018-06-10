@@ -202,7 +202,7 @@ class MainWindow(QMainWindow):
                 global isDone
                 while( isDone ==False):
                     i = 1
-                url = os.path.abspath("static/modeHtml/随着K值得增长查询时延的变化.html")
+                url = os.path.abspath("static/modeHtml/3.2 top-k查询结果.html")
                 self.browser.load(QUrl.fromLocalFile(url))
                 self.setCentralWidget(self.browser)
                 isDone = False
@@ -220,7 +220,7 @@ class MainWindow(QMainWindow):
                 self.first = False
                 while( isDone ==False):
                     i = 1
-                url = os.path.abspath("static/modeHtml/随着R值得增长查询时延的变化.html")
+                url = os.path.abspath("static/modeHtml/4.2 range查询结果.html")
                 self.browser.load(QUrl.fromLocalFile(url))
                 self.setCentralWidget(self.browser)
                 isDone = False
