@@ -106,8 +106,7 @@ def keyword_select(keyword,k,aimlat,aimlng,my_frame_obj,isReturnList=False,isOpe
     starbucks = my_frame_obj.df
     new_columns = starbucks.columns.tolist()
     match_df = pd.DataFrame(columns=new_columns)
-    match_df_obj = MyDataFrame().setDataFrame(match_df)
-    match_df = match_df_obj.df
+    match_df_obj = MyDataFrame()
     match_list = []
     i = 0
     # 第4次迭代，需求3.2，i>0完全匹配
@@ -124,6 +123,7 @@ def keyword_select(keyword,k,aimlat,aimlng,my_frame_obj,isReturnList=False,isOpe
         # listb.insert(0,"关键词为")
         if  i < k:
             print("关键词为"+keyword+"完全匹配的最多有"+str(i)+"个。")
+        match_df_obj.setDataFrame(match_df)
         all_d_dict = count_all_distance(aimlat,aimlng,match_df_obj)
         match_list = top_k(all_d_dict, k, isReturnList=True)
         show_info_in_map(aimlat,aimlng,my_frame_obj,match_list,t="4.3 top-k查询+关键词（完全匹配）",isOpenHtml=isOpen)
@@ -174,6 +174,7 @@ def keyword_select(keyword,k,aimlat,aimlng,my_frame_obj,isReturnList=False,isOpe
             i += 1
             if i >= k:
                 break
+        match_df_obj.setDataFrame(match_df)
         all_d_dict = count_all_distance(aimlat, aimlng, match_df_obj)
         match_list = top_k(all_d_dict, k, isReturnList=True)
         show_info_in_map(aimlat, aimlng, my_frame_obj, match_list, t="4.3 top-k+关键词查询（部分匹配）",isOpenHtml=isOpen)
