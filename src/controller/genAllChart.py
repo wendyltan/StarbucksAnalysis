@@ -28,11 +28,12 @@ class Gen():
         self.starbucks.setTable(table)
 
         # # 第2次迭代，需求1按经纬度绘制散点图
-        dc.draw_map(self.starbucks.df, continent='world',folder='static/chartHtml/')
+        dc.draw_map(self.starbucks.df, continent='world',newtitle='2.1 星巴克世界分布',folder='static/chartHtml/')
         #
         # # 第2次迭代，需求2按时区绘制地图
         self.starbucks = hp.set_random_color_for_df(self.starbucks, "Timezone")
-        dc.draw_map(self.starbucks.df, continent='world', isTimeZone=True,folder='static/chartHtml/')
+        dc.draw_map(self.starbucks.df, continent='world', isTimeZone=True,newtitle='2.2 星巴克时区分布',
+                    folder='static/chartHtml/')
         #
         # # 第2次迭代，需求2按时区绘制条形图
         timezone = self.starbucks.count_number_to_dict("Timezone")
@@ -79,9 +80,10 @@ class Gen():
             scl = [[0, "rgb(0,248,255)"],[0.01, "rgb(10,217,255)"],[0.02, "rgb(20,186,255)"],
                    [0.04, "rgb(31,155,255)"],[0.1, "rgb(41,124,255)"],[0.16, "rgb(51,93,225)"],
                    [0.3, "rgb(61,62,255)"],[0.6, "rgb(71,31,255)"],[1, "rgb(81,0,255)"]]
-            dc.draw_map(self.starbucks.df,isTimeZone=True,isOpen=False,scl=scl,export=False,newtitle="3.1 店铺密度")
+            dc.draw_map(self.starbucks.df,isTimeZone=True,isOpen=False,scl=scl,export=False,
+                        newtitle="3.1 不同时区店铺数量")
 
-        # 第3次迭代，需求2.1。（用改进后的，后面再改改）
+        # 第3次迭代，需求2.1
 
         aimlat = lat
         aimlng = lon
@@ -95,9 +97,9 @@ class Gen():
             print(k_list)
 
 
-            hp.show_info_in_map(aimlat, aimlng, self.starbucks,k_list, t='4.1')
+            hp.show_info_in_map(aimlat, aimlng, self.starbucks,k_list, t='3.2 top-k查询结果')
 
-            # 第3次迭代，需求2.2。（用改进后的，后面再改改）
+            # 第3次迭代，需求2.2
 
             st = time.time()
             # 第4次迭代，需求1改进，以下为随着k增长，查询时延的折线图。
@@ -113,7 +115,7 @@ class Gen():
             st = time.time()
             d_dict = hp.count_all_distance(aimlat, aimlng, self.starbucks)
             r_list = src.controller.no_frameobj_helper.top_r(d_dict, r=r_or_k, isReturnList=True)
-            hp.show_info_in_map(aimlat, aimlng, self.starbucks, r_list, t='4.2.1')
+            hp.show_info_in_map(aimlat, aimlng, self.starbucks, r_list, t='4.2 range查询结果')
 
             # 第4次迭代，需求2.2，展示range查询时延的变化
             # 用户输入：目标经纬度

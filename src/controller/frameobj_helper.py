@@ -96,7 +96,6 @@ def show_info_in_map(aimlat,aimlng,my_frame_obj,local_list,t,isOpenHtml=False):
     """在地图上出查到到的点"""
     # 新建一个小的dataframe,只包含符合条件的Starbucks的数据
     df = my_frame_obj.constructSmallFrame(local_list)
-    # drawmap
     dc.draw_map(df, isOpen=isOpenHtml, size=12, newtitle=t, export=False,
                 enter_la=aimlat, enter_lon=aimlng)
 
@@ -127,7 +126,7 @@ def keyword_select(keyword,k,aimlat,aimlng,my_frame_obj,isReturnList=False,isOpe
             print("关键词为"+keyword+"完全匹配的最多有"+str(i)+"个。")
         all_d_dict = count_all_distance(aimlat,aimlng,match_df_obj)
         match_list = top_k(all_d_dict, k, isReturnList=True)
-        show_info_in_map(aimlat,aimlng,my_frame_obj,match_list,t="4.3.1",isOpenHtml=isOpen)
+        show_info_in_map(aimlat,aimlng,my_frame_obj,match_list,t="4.3 top-k查询+关键词（完全匹配）",isOpenHtml=isOpen)
     # 第4次迭代，需求3.2，i=0进行相似度查询
     if i == 0:
         select_dict_temp = {}
@@ -177,7 +176,7 @@ def keyword_select(keyword,k,aimlat,aimlng,my_frame_obj,isReturnList=False,isOpe
                 break
         all_d_dict = count_all_distance(aimlat, aimlng, match_df_obj)
         match_list = top_k(all_d_dict, k, isReturnList=True)
-        show_info_in_map(aimlat, aimlng, my_frame_obj, match_list, t="4.3.2",isOpenHtml=isOpen)
+        show_info_in_map(aimlat, aimlng, my_frame_obj, match_list, t="4.3 top-k+关键词查询（部分匹配）",isOpenHtml=isOpen)
 
     if isReturnList:
         return match_list

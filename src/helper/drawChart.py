@@ -108,7 +108,7 @@ def draw_line_plot(datalist_x,datalist_y,title,export=False,isOpen=False,folder=
 
 
 def draw_map(starbucks,continent='world',export=False,isTimeZone=False,isOpen=False,scl=0,size=3,
-             newtitle="2.",enter_la=22.25,enter_lon= 113.53,mode='mapbox',folder='static/modeHtml/'):
+             newtitle="",enter_la=22.25,enter_lon= 113.53,mode='mapbox',folder='static/modeHtml/'):
     #是否根据时区筛选
     if not isTimeZone:
         starbucks['text'] = starbucks['City'] + ',' + starbucks["Store Name"]
@@ -212,9 +212,9 @@ def draw_map(starbucks,continent='world',export=False,isTimeZone=False,isOpen=Fa
                      image_filename=continent.title(),auto_open=isOpen)
         else:
             if isTimeZone:
-                off.plot(fig, filename=folder+ newtitle + '2 星巴克按时区分布.html',auto_open=isOpen)
+                off.plot(fig, filename=folder+ newtitle+".html" ,auto_open=isOpen)
             else:
-                off.plot(fig, filename=folder + newtitle + '1 星巴克世界分布.html', auto_open=isOpen)
+                off.plot(fig, filename=folder + newtitle+".html" , auto_open=isOpen)
 
 
 def draw_map_by_country(starbucks,title="Default",isOpen=False,folder='static/modeHtml/'):

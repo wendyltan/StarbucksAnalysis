@@ -57,8 +57,8 @@ class MainWindow(QMainWindow):
         # 添加导航栏到窗口中
         self.addToolBar(navigation_bar)
         self.normalMenu = menubar.addMenu('常规图表')
-        self.fileMenu = menubar.addMenu('模式图表')
         self.modeMenu = menubar.addMenu('选择模式')
+        self.fileMenu = menubar.addMenu('模式图表')
         self.scoreMenu = menubar.addMenu('进入评分')
 
 
