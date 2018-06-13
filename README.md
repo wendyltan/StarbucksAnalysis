@@ -75,31 +75,9 @@ An analytical project for Starbucks dataset
 ## Usage
 Just run `main.py`
 
-## Project Structure
-- Folder:
-    + *chartHtml* : Store the generated html files
-    
-    + *dataset*: Store the orginal dataset(xlsx and csv file)
-    
-    + *guiHelper* : Extra gui ,like table or dialog,etc..
-    
-    + *icons* : icons for main gui
-    
-    + *test*: simple test files
-    
-    + *util*: most of the `.py` deal with requirements go in here
-- Scripts:
-    + **drawChart.py**: use to draw Map.All drawing method place here.
-    
-    + **gui.py** : main user interface
-    
-    + **main.py** : run this to exec the program
-    
-    + ~~**models.py**~~ : deprecated after getDataframe() is invoked
-    
-    + ~~**query.py**~~ : deprecated after getDataframe() is invoked
-
 ## 历史开发进度
+- 18/6/11:
+    + **Wendy**成功打包了exe文件
 - 18/6/9:
     + 全员进行了一次目录结构的重构，并且抽象出一些类运用了三种设计模式
 - 18/5/28:
